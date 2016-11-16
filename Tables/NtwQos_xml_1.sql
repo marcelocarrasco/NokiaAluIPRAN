@@ -1,0 +1,18 @@
+--
+-- Tabla auxiliar para almacenar la info del archivo YYYYMMDDHH24MI_NtwQos.xml_1
+--
+CREATE TABLE XML_NTWQOS_1 (
+    PORT_ID	                          VARCHAR2(50 CHAR)
+    ,QUEUE_ID	                        NUMBER
+    ,LAG_PORT	                        VARCHAR2(50 CHAR)
+    ,TIME_RECORDED	                  NUMBER
+    ,IN_PROFILE_OCTETS_FORWARDED	    NUMBER
+    ,IN_PROFILE_OCTETS_DROPPED	      NUMBER
+    ,OUT_OF_PROFILE_OCTETS_FORWARD  	NUMBER
+    ,OUT_OF_PROFILE_OCTETS_DROPPED	  NUMBER
+    ,MONITORED_OBJECT_SITE_ID	        VARCHAR2(15 CHAR)
+    ,MONITORED_OBJECT_SITE_NAME	      VARCHAR2(500 CHAR)
+) NOCOMPRESS NOLOGGING;
+
+COMMENT ON TABLE XML_NTWQOS_1 IS 'Tabla auxiliar para almacenar la info del archivo YYYYMMDDHH24MI_NtwQos.xml_1';
+COMMENT ON COLUMN XML_NTWQOS_1.OUT_OF_PROFILE_OCTETS_FORWARD IS 'Reescritura de la columna OUT_OF_PROFILE_OCTETS_FORWARDED por superar los 30 char';

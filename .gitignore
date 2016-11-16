@@ -1,0 +1,9 @@
+#Logs
+/PentahoLogs/*
+*.log
+
+#Others
+/xml_output/*
+*.gz
+/Scripts/*.lst
+
