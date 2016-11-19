@@ -4,6 +4,7 @@
     <description/>
     <extended_description/>
     <job_version/>
+    <job_status>0</job_status>
   <directory>&#x2f;</directory>
   <created_user>-</created_user>
   <created_date>2016&#x2f;11&#x2f;16 14&#x3a;52&#x3a;03.357</created_date>
@@ -51,7 +52,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>80</xloc>
-      <yloc>80</yloc>
+      <yloc>112</yloc>
       </entry>
     <entry>
       <name>SetEnvironment</name>
@@ -84,7 +85,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>208</xloc>
-      <yloc>80</yloc>
+      <yloc>112</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -93,8 +94,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>912</xloc>
-      <yloc>192</yloc>
+      <xloc>784</xloc>
+      <yloc>272</yloc>
       </entry>
     <entry>
       <name>PopulateFILESTable</name>
@@ -125,7 +126,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>544</xloc>
-      <yloc>80</yloc>
+      <yloc>112</yloc>
       </entry>
     <entry>
       <name>Set FILE-NAME variable</name>
@@ -150,12 +151,48 @@
           <variable_value>&#x24;&#x7b;CARDSTATUS-XML-EXCLUDE&#x7d;</variable_value>
           <variable_type>CURRENT_JOB</variable_type>
         </field>
+        <field>
+          <variable_name>ORACLE-REGEXP</variable_name>
+          <variable_value>&#x24;&#x7b;CARDSTATUS_XML_REGEXP_ORA&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>384</xloc>
-      <yloc>80</yloc>
+      <yloc>112</yloc>
+      </entry>
+    <entry>
+      <name>CardStatus_xml --&#x3e; XML_CARD_STATUS</name>
+      <description/>
+      <type>JOB</type>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;ImportDataToXML_CARD_STATUSTable.kjb</filename>
+      <jobname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>Y</set_logfile>
+      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;cardstatus_xml_to_xml_card_status</logfile>
+      <logext>log</logext>
+      <add_date>Y</add_date>
+      <add_time>N</add_time>
+      <loglevel>Error</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>N</create_parent_folder>
+      <pass_export>N</pass_export>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <set_append_logfile>N</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>784</xloc>
+      <yloc>112</yloc>
       </entry>
   </entries>
   <hops>
@@ -167,15 +204,6 @@
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>PopulateFILESTable</from>
-      <to>Success</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
     </hop>
     <hop>
       <from>SetEnvironment</from>
@@ -195,8 +223,47 @@
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
+    <hop>
+      <from>PopulateFILESTable</from>
+      <to>CardStatus_xml --&#x3e; XML_CARD_STATUS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CardStatus_xml --&#x3e; XML_CARD_STATUS</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
   </hops>
   <notepads>
+    <notepad>
+      <note>Reemplazar el parametro FECHA-PROC, ya que sera pasado como parametro&#xa;al Job ppal.</note>
+      <xloc>48</xloc>
+      <yloc>16</yloc>
+      <width>525</width>
+      <heigth>44</heigth>
+      <fontname/>
+      <fontsize>-1</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>205</backgroundcolorgreen>
+      <backgroundcolorblue>112</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
   </notepads>
 
 </job>

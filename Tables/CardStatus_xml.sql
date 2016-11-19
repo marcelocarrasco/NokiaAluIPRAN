@@ -3,11 +3,7 @@
 -- DROP table XML_CARD_STATUS purge;
 
 CREATE TABLE XML_CARD_STATUS (
-    FECHA                     AS (SUBSTR(NOMBRE_CSV,-25,2)||'.'||
-                                  SUBSTR(NOMBRE_CSV,-27,2)||'.'||
-                                  SUBSTR(NOMBRE_CSV,-31,4)||' '||
-                                  SUBSTR(NOMBRE_CSV,-23,2)||':'||
-                                  SUBSTR(NOMBRE_CSV,-21,2))
+    MEDICION                  VARCHAR2(50 CHAR)
     ,SITE_NAME	              VARCHAR2(50 CHAR)
     ,EQUIPMENT_CATEGORY	      VARCHAR2(50 CHAR)
     ,EQUIPMENT_STATE	        VARCHAR2(50 CHAR)
@@ -18,6 +14,11 @@ CREATE TABLE XML_CARD_STATUS (
     ,IS_EQUIPMENT_INSERTED	  VARCHAR2(50 CHAR)
     ,OBJECT_FULL_NAME         VARCHAR2(500 CHAR)
     ,NOMBRE_CSV               VARCHAR2(100 CHAR)
+    ,FECHA                    VARCHAR2(100 CHAR) GENERATED ALWAYS AS (SUBSTR(NOMBRE_CSV,-25,2)||'.'||
+                                                                      SUBSTR(NOMBRE_CSV,-27,2)||'.'||
+                                                                      SUBSTR(NOMBRE_CSV,-31,4)||' '||
+                                                                      SUBSTR(NOMBRE_CSV,-23,2)||':'||
+                                                                      SUBSTR(NOMBRE_CSV,-21,2)) VIRTUAL
 ) NOCOMPRESS NOLOGGING;
 
 COMMENT ON TABLE XML_CARD_STATUS IS 'Tabla auxiliar para almacenar la info del archivo YYYYMMDDHH24MI_CardStatus.xml';

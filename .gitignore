@@ -3,7 +3,7 @@
 *.log
 
 #Others
-/xml_output/*
+/xml_output/*.csv
 *.gz
 /Scripts/*.lst
 
