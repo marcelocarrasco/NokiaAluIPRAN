@@ -12,6 +12,30 @@
   <modified_date>2016&#x2f;11&#x2f;16 14&#x3a;52&#x3a;03.357</modified_date>
     <parameters>
     </parameters>
+  <connection>
+    <name>db_connection</name>
+    <server>&#x24;&#x7b;DB-HOST&#x7d;</server>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>&#x24;&#x7b;DB-NAME&#x7d;</database>
+    <port>&#x24;&#x7b;DB-PORT&#x7d;</port>
+    <username>&#x24;&#x7b;DB-USER&#x7d;</username>
+    <password>&#x24;&#x7b;DB-PASSWORD&#x7d;</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>&#x24;&#x7b;DB-PORT&#x7d;</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
     <slaveservers>
     </slaveservers>
 <job-log-table><connection/>
@@ -51,8 +75,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>80</xloc>
-      <yloc>112</yloc>
+      <xloc>96</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>SetEnvironment</name>
@@ -84,8 +108,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>208</xloc>
-      <yloc>112</yloc>
+      <xloc>224</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -94,8 +118,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>272</yloc>
+      <xloc>1008</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>PopulateFILESTable</name>
@@ -125,8 +149,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
-      <yloc>112</yloc>
+      <xloc>560</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>Set FILE-NAME variable</name>
@@ -156,12 +180,17 @@
           <variable_value>&#x24;&#x7b;CARDSTATUS_XML_REGEXP_ORA&#x7d;</variable_value>
           <variable_type>CURRENT_JOB</variable_type>
         </field>
+        <field>
+          <variable_name>TABLA</variable_name>
+          <variable_value>XML_CARD_STATUS</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>112</yloc>
+      <xloc>400</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>CardStatus_xml --&#x3e; XML_CARD_STATUS</name>
@@ -191,8 +220,39 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>112</yloc>
+      <xloc>800</xloc>
+      <yloc>96</yloc>
+      </entry>
+    <entry>
+      <name>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</name>
+      <description/>
+      <type>EVAL_TABLE_CONTENT</type>
+      <connection>db_connection</connection>
+      <schemaname/>
+      <tablename/>
+      <success_condition>rows_count_greater</success_condition>
+      <limit>0</limit>
+      <is_custom_sql>Y</is_custom_sql>
+      <is_usevars>Y</is_usevars>
+      <custom_sql>SELECT  NOMBRE_CSV&#xa;FROM FILES&#xa;WHERE REGEXP_LIKE&#x28;NOMBRE_CSV,&#x27;&#x24;&#x7b;ORACLE-REGEXP&#x7d;&#x27;&#x29; --&#xa;--AND NOT REGEXP_LIKE&#x28;nombre_csv,&#x27;&#x5e;&#x2a;&#x28;CardStatus_xml_1&#x29;&#x5c;.csv&#x24;&#x27;&#x29;&#xa;AND NOMBRE_CSV LIKE &#x27;&#x25;&#x24;&#x7b;FECHA-PROC&#x7d;&#x25;&#x27;&#xa;--AND SUBSTR&#x28;NOMBRE_CSV,-31,8&#x29; &#x3d; &#x27;&#x24;&#x7b;FECHA-PROC&#x7d;&#x27; --Formato YYYYMMDD&#xa;AND STATUS &#x3d; 5&#xa;AND PROCESADO IS NULL</custom_sql>
+      <add_rows_result>N</add_rows_result>
+      <clear_result_rows>Y</clear_result_rows>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>800</xloc>
+      <yloc>224</yloc>
+      </entry>
+    <entry>
+      <name>Job CarsStatusXmlEndToEnd Aborted</name>
+      <description/>
+      <type>ABORT</type>
+      <message>&#x3d;&#x3d;&#x3e;&#x3e; No hay archivos nuevos a procesar&#x3a; &#x24;&#x7b;FECHA-PROC&#x7d; &#x3c;&#x3c;&#x3d;&#x3d;</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>800</xloc>
+      <yloc>384</yloc>
       </entry>
   </entries>
   <hops>
@@ -224,15 +284,6 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>PopulateFILESTable</from>
-      <to>CardStatus_xml --&#x3e; XML_CARD_STATUS</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>CardStatus_xml --&#x3e; XML_CARD_STATUS</from>
       <to>Success</to>
       <from_nr>0</from_nr>
@@ -241,16 +292,43 @@
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
+    <hop>
+      <from>PopulateFILESTable</from>
+      <to>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</from>
+      <to>CardStatus_xml --&#x3e; XML_CARD_STATUS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</from>
+      <to>Job CarsStatusXmlEndToEnd Aborted</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
   </hops>
   <notepads>
     <notepad>
-      <note>Reemplazar el parametro FECHA-PROC, ya que sera pasado como parametro&#xa;al Job ppal.</note>
+      <note>Despues de PopulateFILESTable, verificar si hay archivos para procesar, sino,&#xa;finalizar proceso con mensaje de &#x22;No existen Archivos&#x22;</note>
       <xloc>48</xloc>
       <yloc>16</yloc>
-      <width>525</width>
+      <width>529</width>
       <heigth>44</heigth>
-      <fontname/>
-      <fontsize>-1</fontsize>
+      <fontname>Sans</fontname>
+      <fontsize>10</fontsize>
       <fontbold>N</fontbold>
       <fontitalic>N</fontitalic>
       <fontcolorred>0</fontcolorred>

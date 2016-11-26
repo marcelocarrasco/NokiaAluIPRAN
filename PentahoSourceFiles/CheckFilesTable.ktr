@@ -119,7 +119,7 @@
     <single_statement>Y</single_statement>
     <replace_variables>Y</replace_variables>
     <quoteString>N</quoteString>
-    <sql>MERGE INTO FILES&#xa;USING &#x28;SELECT  TBL.NOMBRE_CSV ARCHIVO,&#xa;               TBL.CNT_LOADED - FLS.CNT_FILAS TOTAL&#xa;      FROM  &#x28;SELECT NOMBRE_CSV,COUNT&#x28;&#x2a;&#x29; CNT_LOADED&#xa;            FROM  XML_CARD_STATUS --&#x24;&#x7b;TABLA&#x7d;&#xa;            WHERE NOMBRE_CSV LIKE &#x27;&#x25;&#x24;&#x7b;FECHA-PROC&#x7d;&#x25;&#x27;&#xa;            GROUP BY NOMBRE_CSV&#x29; TBL,&#xa;            &#x28;SELECT  NOMBRE_CSV,&#x28;row_num -1&#x29; CNT_FILAS&#xa;            FROM FILES&#xa;            WHERE REGEXP_LIKE&#x28;NOMBRE_CSV,&#x27;&#x24;&#x7b;ORACLE-REGEXP&#x7d;&#x27;&#x29; --&#xa;            --AND NOT REGEXP_LIKE&#x28;nombre_csv,&#x27;&#x5e;&#x2a;&#x28;CardStatus_xml_1&#x29;&#x5c;.csv&#x24;&#x27;&#x29;&#xa;            AND NOMBRE_CSV LIKE &#x27;&#x25;&#x24;&#x7b;FECHA-PROC&#x7d;&#x25;&#x27; --SUBSTR&#x28;NOMBRE_CSV,-31,8&#x29; &#x3d; &#x27;&#x24;&#x7b;FECHA-PROC&#x7d;&#x27; --Formato YYYYMMDD&#xa;            AND STATUS &#x3d; 5&#xa;            AND PROCESADO IS NULL&#x29; FLS&#xa;      WHERE TBL.NOMBRE_CSV &#x3d; FLS.NOMBRE_CSV&#x29; PARES&#xa;ON &#x28;FILES.NOMBRE_CSV &#x3d; PARES.ARCHIVO&#x29;&#xa;WHEN MATCHED THEN&#xa;  UPDATE SET&#xa;    STATUS &#x3d; CASE&#xa;                WHEN  PARES.TOTAL &#x3d; 0 THEN 0 ELSE 1&#xa;            END,&#xa;    PROCESADO &#x3d; SYSDATE</sql>
+    <sql>MERGE INTO FILES&#xa;USING &#x28;SELECT  TBL.NOMBRE_CSV ARCHIVO,&#xa;               TBL.CNT_LOADED - FLS.CNT_FILAS TOTAL&#xa;      FROM  &#x28;SELECT NOMBRE_CSV,COUNT&#x28;&#x2a;&#x29; CNT_LOADED&#xa;            FROM  &#x24;&#x7b;TABLA&#x7d;&#xa;            WHERE NOMBRE_CSV LIKE &#x27;&#x25;&#x24;&#x7b;FECHA-PROC&#x7d;&#x25;&#x27;&#xa;            GROUP BY NOMBRE_CSV&#x29; TBL,&#xa;            &#x28;SELECT  NOMBRE_CSV,&#x28;row_num -1&#x29; CNT_FILAS&#xa;            FROM FILES&#xa;            WHERE REGEXP_LIKE&#x28;NOMBRE_CSV,&#x27;&#x24;&#x7b;ORACLE-REGEXP&#x7d;&#x27;&#x29; --&#xa;            --AND NOT REGEXP_LIKE&#x28;nombre_csv,&#x27;&#x5e;&#x2a;&#x28;CardStatus_xml_1&#x29;&#x5c;.csv&#x24;&#x27;&#x29;&#xa;            AND NOMBRE_CSV LIKE &#x27;&#x25;&#x24;&#x7b;FECHA-PROC&#x7d;&#x25;&#x27; --SUBSTR&#x28;NOMBRE_CSV,-31,8&#x29; &#x3d; &#x27;&#x24;&#x7b;FECHA-PROC&#x7d;&#x27; --Formato YYYYMMDD&#xa;            AND STATUS &#x3d; 5&#xa;            AND PROCESADO IS NULL&#x29; FLS&#xa;      WHERE TBL.NOMBRE_CSV &#x3d; FLS.NOMBRE_CSV&#x29; PARES&#xa;ON &#x28;FILES.NOMBRE_CSV &#x3d; PARES.ARCHIVO&#x29;&#xa;WHEN MATCHED THEN&#xa;  UPDATE SET&#xa;    STATUS &#x3d; CASE&#xa;                WHEN  PARES.TOTAL &#x3d; 0 THEN 0 ELSE 1&#xa;            END,&#xa;    PROCESADO &#x3d; SYSDATE</sql>
     <set_params>N</set_params>
     <insert_field/>
     <update_field/>
@@ -128,6 +128,7 @@
     <arguments>
        <argument><name>FECHA-PROC</name></argument>
        <argument><name>ORACLE-REGEXP</name></argument>
+       <argument><name>TABLA</name></argument>
     </arguments>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -164,6 +165,18 @@
       <field>
         <name>ORACLE-REGEXP</name>
         <variable>&#x24;&#x7b;ORACLE-REGEXP&#x7d;</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>TABLA</name>
+        <variable>&#x24;&#x7b;TABLA&#x7d;</variable>
         <type>String</type>
         <format/>
         <currency/>

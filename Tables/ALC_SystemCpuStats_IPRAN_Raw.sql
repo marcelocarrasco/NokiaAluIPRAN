@@ -1,8 +1,8 @@
-select length('ALC_SYSTEM_CPU_STATS_IPRAN_RAW') from dual;
-
+--
 -- DROP TABLE ALC_SYSTEM_CPU_STATS_IPRAN_RAW;
-
+--
 CREATE TABLE ALC_SYSTEM_CPU_STATS_IPRAN_RAW(
+  FECHA                       DATE NOT NULL,
   SYSTEM_CPU_USAGE	          NUMBER  DEFAULT 0 NOT NULL,
   TIME_CAPTURED	              NUMBER  DEFAULT 0 NOT NULL,
   PERIODIC_TIME	              NUMBER  DEFAULT 0 NOT NULL,
@@ -11,3 +11,21 @@ CREATE TABLE ALC_SYSTEM_CPU_STATS_IPRAN_RAW(
 ) NOCOMPRESS NOLOGGING;
 
 COMMENT ON TABLE ALC_SYSTEM_CPU_STATS_IPRAN_RAW IS 'Medición: Medicion de la CPU';
+
+
+--
+--
+--
+INSERT INTO ALC_SYSTEM_CPU_STATS_IPRAN_RAW (FECHA                       ,
+        SYSTEM_CPU_USAGE	          ,
+        TIME_CAPTURED	              ,
+        PERIODIC_TIME	              ,
+        MONITORED_OBJECT_SITE_ID    ,
+        MONITORED_OBJECT_SITE_NAME)
+SELECT  FECHA                       ,
+        SYSTEM_CPU_USAGE	          ,
+        TIME_CAPTURED	              ,
+        PERIODIC_TIME	              ,
+        MONITORED_OBJECT_SITE_ID    ,
+        MONITORED_OBJECT_SITE_NAME
+FROM  XML_SYSTEM_STATS_3;        

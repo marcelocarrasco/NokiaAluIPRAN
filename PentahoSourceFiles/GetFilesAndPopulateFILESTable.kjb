@@ -66,14 +66,14 @@
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
+      <clear_rows>Y</clear_rows>
       <clear_files>Y</clear_files>
       <set_logfile>Y</set_logfile>
       <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;get_files_and_populate_files_table</logfile>
       <logext>log</logext>
       <add_date>N</add_date>
       <add_time>N</add_time>
-      <loglevel>Basic</loglevel>
+      <loglevel>Error</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
       <set_append_logfile>N</set_append_logfile>
@@ -99,7 +99,7 @@
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>Y</exec_per_row>
-      <clear_rows>N</clear_rows>
+      <clear_rows>Y</clear_rows>
       <clear_files>Y</clear_files>
       <set_logfile>Y</set_logfile>
       <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;populate_FILES_table</logfile>

@@ -14,7 +14,6 @@ LISTA_OUTPUT=$1/Scripts/listaArc$(date +'%Y%m%d_%H%m%s').lst
 echo "Copiando archivos origen --> destino"
 
 rsync -avzu --include-from=$RUTA/Scripts/includes.conf nokia@10.84.92.20:/opt/5620sam/server/xml_output/ $RUTA/xml_output/  > $LISTA_OUTPUT
-#rsync -avz --include-from=$RUTA/Scripts/includes.conf nokia@10.84.92.20:/opt/5620sam/server/xml_output/ $RUTA/xml_output/ | sed 's/............//' >> $LISTA_OUTPUT
  
 # Agrego la ruta completa a los archivos
 sed -i "s,^,$RUTA/xml_output/,g" $LISTA_OUTPUT
@@ -41,11 +40,20 @@ if [[ -s $LISTA_OUTPUT ]] ; then
   echo "Reemplazando caracter . en nodos de los xml de la lista $LISTA_OUTPUT"
   sh $1/Scripts/replaceDotInNode.sh $1 $LISTA_OUTPUT
   echo "Ejecutando parser para lista de archivos $LISTA_OUTPUT si esta contiene archivos a parsear"
-  java -jar $1/Scripts/GetFilesPrueba.jar $LISTA_OUTPUT
+  java -jar $1/Scripts/nokia_alu_ipran_1.0.0.jar $LISTA_OUTPUT
+  # Eliminar el archivo .lst parseado
+  echo "Elimino $LISTA_OUTPUT ya parseada"
+  rm $LISTA_OUTPUT
+  # Reemplazo _xml_1 --> _1_xml
+  echo "Renombrando archivos"
+  for file in $(ls $1/xml_output/*mediaIndependStats_xml_1.csv) ; do mv $file ${file//_xml_1/_1_xml} ; done
+  for file in $(ls $1/xml_output/*SystemStats_xml_1.csv) ; do mv $file ${file//_xml_1/_1_xml} ; done
+  for file in $(ls $1/xml_output/*SystemStats_xml_2.csv) ; do mv $file ${file//_xml_2/_2_xml} ; done
+  for file in $(ls $1/xml_output/*SystemStats_xml_3.csv) ; do mv $file ${file//_xml_3/_3_xml} ; done
+  for file in $(ls $1/xml_output/*NtwQos_xml_1.csv) ; do mv $file ${file//_xml_1/_1_xml} ; done
+
 else
   echo "No hay archivos a procesar..."
   rm $LISTA_OUTPUT
 fi
-# Eliminar el archivo .lst parseado
-echo "Elimino $LISTA_OUTPUT ya parseada"
-# rm $LISTA_OUTPUT
+# date -d '1 hour ago' "+%Y%m%d%H"
