@@ -40,7 +40,7 @@ if [[ -s $LISTA_OUTPUT ]] ; then
   echo "Reemplazando caracter . en nodos de los xml de la lista $LISTA_OUTPUT"
   sh $1/Scripts/replaceDotInNode.sh $1 $LISTA_OUTPUT
   echo "Ejecutando parser para lista de archivos $LISTA_OUTPUT si esta contiene archivos a parsear"
-  java -jar $1/Scripts/nokia_alu_ipran_1.0.0.jar $LISTA_OUTPUT
+  java -jar $1/Scripts/nokia_alu_ipran_1.0.1.jar $LISTA_OUTPUT
   # Eliminar el archivo .lst parseado
   echo "Elimino $LISTA_OUTPUT ya parseada"
   rm $LISTA_OUTPUT

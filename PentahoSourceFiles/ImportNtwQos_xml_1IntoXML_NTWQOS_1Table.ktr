@@ -179,7 +179,7 @@
     <filename_field>NOMBRE_CSV</filename_field>
     <rownum_field/>
     <include_filename>Y</include_filename>
-    <separator>,</separator>
+    <separator>&#x3b;</separator>
     <enclosure>&#x22;</enclosure>
     <header>Y</header>
     <buffer_size>50000</buffer_size>

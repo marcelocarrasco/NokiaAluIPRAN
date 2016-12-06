@@ -254,6 +254,34 @@
       <xloc>784</xloc>
       <yloc>384</yloc>
       </entry>
+    <entry>
+      <name>Zip MediaIndependStatsXml files</name>
+      <description/>
+      <type>ZIP_FILE</type>
+      <zipfilename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output&#x2f;CSV&#x2f;MediaIndependStatsXml.zip</zipfilename>
+      <compressionrate>2</compressionrate>
+      <ifzipfileexists>1</ifzipfileexists>
+      <wildcard>&#x24;&#x7b;MEDIAINDEPENDSTATS-XML&#x7d;</wildcard>
+      <wildcardexclude/>
+      <sourcedirectory>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output</sourcedirectory>
+      <movetodirectory/>
+      <afterzip>1</afterzip>
+      <addfiletoresult>N</addfiletoresult>
+      <isfromprevious>N</isfromprevious>
+      <createparentfolder>N</createparentfolder>
+      <adddate>N</adddate>
+      <addtime>N</addtime>
+      <SpecifyFormat>Y</SpecifyFormat>
+      <date_time_format>yyyyMMddHHmmss</date_time_format>
+      <createMoveToDirectory>N</createMoveToDirectory>
+      <include_subfolders>Y</include_subfolders>
+      <stored_source_path_depth>1</stored_source_path_depth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>944</xloc>
+      <yloc>64</yloc>
+      </entry>
   </entries>
   <hops>
     <hop>
@@ -277,15 +305,6 @@
     <hop>
       <from>Set FILE-NAME variable</from>
       <to>PopulateFILESTable</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>mediaIndepenStats_xml --&#x3e; XML_MEDIA_INDEPEND_STATS</from>
-      <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -317,6 +336,33 @@
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>mediaIndepenStats_xml --&#x3e; XML_MEDIA_INDEPEND_STATS</from>
+      <to>Zip MediaIndependStatsXml files</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Zip MediaIndependStatsXml files</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>mediaIndepenStats_xml --&#x3e; XML_MEDIA_INDEPEND_STATS</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
   </hops>

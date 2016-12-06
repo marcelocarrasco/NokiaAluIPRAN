@@ -76,7 +76,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>96</xloc>
-      <yloc>224</yloc>
+      <yloc>80</yloc>
       </entry>
     <entry>
       <name>SetEnvironment</name>
@@ -109,7 +109,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>224</xloc>
-      <yloc>224</yloc>
+      <yloc>80</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -118,8 +118,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>16</yloc>
+      <xloc>464</xloc>
+      <yloc>416</yloc>
       </entry>
     <entry>
       <name>PopulateFILESTable</name>
@@ -150,7 +150,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>560</xloc>
-      <yloc>224</yloc>
+      <yloc>80</yloc>
       </entry>
     <entry>
       <name>Set FILE-NAME variable</name>
@@ -185,17 +185,12 @@
           <variable_value>XML_NTWQOS_1</variable_value>
           <variable_type>CURRENT_JOB</variable_type>
         </field>
-        <field>
-          <variable_name>ZIP-FILE</variable_name>
-          <variable_value>&#x24;&#x7b;NTWQOS_XML_UNO_ZIP&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>400</xloc>
-      <yloc>224</yloc>
+      <yloc>80</yloc>
       </entry>
     <entry>
       <name>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</name>
@@ -225,8 +220,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>112</yloc>
+      <xloc>224</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>Hay Arch. NtwQosXml_1 para procesar&#x3f;&#x3f;</name>
@@ -245,7 +240,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
+      <xloc>560</xloc>
       <yloc>224</yloc>
       </entry>
     <entry>
@@ -256,8 +251,69 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>368</yloc>
+      <xloc>864</xloc>
+      <yloc>224</yloc>
+      </entry>
+    <entry>
+      <name>Zip NtwQosXmlUno files</name>
+      <description/>
+      <type>ZIP_FILE</type>
+      <zipfilename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output&#x2f;CSV&#x2f;NtwQosXmlUno.zip</zipfilename>
+      <compressionrate>2</compressionrate>
+      <ifzipfileexists>1</ifzipfileexists>
+      <wildcard>&#x24;&#x7b;NTWQOS-XML-UNO&#x7d;</wildcard>
+      <wildcardexclude/>
+      <sourcedirectory>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output</sourcedirectory>
+      <movetodirectory/>
+      <afterzip>1</afterzip>
+      <addfiletoresult>N</addfiletoresult>
+      <isfromprevious>N</isfromprevious>
+      <createparentfolder>N</createparentfolder>
+      <adddate>N</adddate>
+      <addtime>N</addtime>
+      <SpecifyFormat>Y</SpecifyFormat>
+      <date_time_format>yyyyMMddHHmmss</date_time_format>
+      <createMoveToDirectory>N</createMoveToDirectory>
+      <include_subfolders>Y</include_subfolders>
+      <stored_source_path_depth>1</stored_source_path_depth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>144</xloc>
+      <yloc>320</yloc>
+      </entry>
+    <entry>
+      <name>Populate ALC_LAGS_IPRAN_SCNEOLR_RAW Table</name>
+      <description/>
+      <type>TRANS</type>
+      <specification_method>filename</specification_method>
+      <trans_object_id/>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;PopulateALC_LAGS_IPRAN_SCNEOLR_RAWTable.ktr</filename>
+      <transname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>Y</set_logfile>
+      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;populate_alc_lags_ipran_scneolr_raw_table</logfile>
+      <logext>log</logext>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Error</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>224</xloc>
+      <yloc>416</yloc>
       </entry>
   </entries>
   <hops>
@@ -289,15 +345,6 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</from>
-      <to>Success</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Hay Arch. NtwQosXml_1 para procesar&#x3f;&#x3f;</from>
       <to>Job NtwQosXmlUnoEndToEnd Aborted</to>
       <from_nr>0</from_nr>
@@ -318,6 +365,42 @@
     <hop>
       <from>PopulateFILESTable</from>
       <to>Hay Arch. NtwQosXml_1 para procesar&#x3f;&#x3f;</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</from>
+      <to>Zip NtwQosXmlUno files</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Zip NtwQosXmlUno files</from>
+      <to>Populate ALC_LAGS_IPRAN_SCNEOLR_RAW Table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Populate ALC_LAGS_IPRAN_SCNEOLR_RAW Table</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</from>
+      <to>Populate ALC_LAGS_IPRAN_SCNEOLR_RAW Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

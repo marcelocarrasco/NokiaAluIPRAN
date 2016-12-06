@@ -106,7 +106,6 @@
   <hop> <from>Add TABLA constant</from><to>Set Variables</to><enabled>Y</enabled> </hop>
   <hop> <from>Set Variables</from><to>NtwQos_xml CSV file</to><enabled>Y</enabled> </hop>
   <hop> <from>NtwQos_xml CSV file</from><to>Write to log</to><enabled>N</enabled> </hop>
-  <hop> <from>Generate Rows</from><to>Add TABLA constant</to><enabled>N</enabled> </hop>
   <hop> <from>NtwQos_xml CSV file</from><to>XML_NTWQOS</to><enabled>Y</enabled> </hop>
   </order>
   <step>
@@ -138,44 +137,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>240</xloc>
       <yloc>80</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Generate Rows</name>
-    <type>RowGenerator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>NOMBRE_CSV</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>&#x2f;home&#x2f;oracle&#x2f;NokiaAluIPRAN&#x2f;xml_output&#x2f;201611241410_NtwQos_xml.csv</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-    <limit>1</limit>
-    <never_ending>N</never_ending>
-    <interval_in_ms>5000</interval_in_ms>
-    <row_time_field>now</row_time_field>
-    <last_time_field>FiveSecondsAgo</last_time_field>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>80</xloc>
-      <yloc>208</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -218,7 +179,7 @@
     <filename_field>NOMBRE_CSV</filename_field>
     <rownum_field/>
     <include_filename>Y</include_filename>
-    <separator>,</separator>
+    <separator>&#x3b;</separator>
     <enclosure>&#x22;</enclosure>
     <header>Y</header>
     <buffer_size>50000</buffer_size>
