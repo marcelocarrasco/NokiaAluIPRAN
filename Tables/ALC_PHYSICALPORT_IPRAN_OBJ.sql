@@ -87,8 +87,8 @@ WHERE DATOS.RN = 1;
 -- Merge A: los datos de XML_MEDIA_INDP_STATS que no esten en ALC_PHYSICALPORT_IPRAN_OBJ se agregan.....
 
 MERGE INTO ALC_PHYSICALPORT_IPRAN_OBJ ALC
-USING (WITH DATOS AS  (SELECT  /*+ MATERIALIZE */
-                              TO_CHAR(FECHA,'DD.MM.YYYY') VALID_START_DATE
+USING (WITH DATOS AS  (SELECT  /*+ INLINE */
+                              TO_CHAR(SYSDATE,'DD.MM.YYYY') VALID_START_DATE
                               ,SPECIFIC_TYPE
                               ,DESCRIPTION
                               ,MODO
@@ -103,7 +103,8 @@ USING (WITH DATOS AS  (SELECT  /*+ MATERIALIZE */
                               ,ADMINISTRATIVE_STATE
                               ,OLC_STATE
                               ,OBJECT_FULL_NAME
-                              ,ROW_NUMBER() OVER (PARTITION BY site_name,site_id,mac_address ORDER BY site_name) RN
+                              ,ROW_NUMBER() OVER (PARTITION BY SITE_NAME,SITE_ID,MAC_ADDRESS,OBJECT_FULL_NAME 
+                                                  ORDER BY SITE_NAME,SITE_ID,MAC_ADDRESS,OBJECT_FULL_NAME) RN
                       FROM XML_MEDIA_INDEPEND_STATS
                       WHERE TO_CHAR(FECHA,'DD.MM.YYYY') = '05.12.2016')
       SELECT VALID_START_DATE
@@ -124,7 +125,7 @@ USING (WITH DATOS AS  (SELECT  /*+ MATERIALIZE */
       FROM  DATOS
       WHERE RN = 1) TEMP
 ON (ALC.SITE_NAME = TEMP.SITE_NAME AND ALC.MAC_ADDRESS = TEMP.MAC_ADDRESS AND ALC.SITE_ID = TEMP.SITE_ID AND
-    ALC.OBJECT_FULL_NAME = TEMP.OBJECT_FULL_NAME)
+    ALC.OBJECT_FULL_NAME = TEMP.OBJECT_FULL_NAME AND ALC.VALID_FINISH_DATE > SYSDATE)
 WHEN NOT MATCHED THEN
   INSERT (VALID_START_DATE,SITE_ID,SITE_NAME,MAC_ADDRESS,OBJECT_FULL_NAME,SPECIFIC_TYPE
          ,DESCRIPTION,MODO,MTU_VALUE,SPEED,ACTUAL_SPEED,NUMBER_OF_POSSIBLE_CHANNELS
@@ -132,7 +133,46 @@ WHEN NOT MATCHED THEN
   VALUES (TEMP.VALID_START_DATE,TEMP.SITE_ID,TEMP.SITE_NAME,TEMP.MAC_ADDRESS,TEMP.OBJECT_FULL_NAME,TEMP.SPECIFIC_TYPE
          ,TEMP.DESCRIPTION,TEMP.MODO,TEMP.MTU_VALUE,TEMP.SPEED,TEMP.ACTUAL_SPEED,TEMP.NUMBER_OF_POSSIBLE_CHANNELS
          ,TEMP.OPERATIONAL_STATE,TEMP.ADMINISTRATIVE_STATE,TEMP.OLC_STATE);
+         
+         
+SELECT * FROM ALC_PHYSICALPORT_IPRAN_OBJ ALC
+WHERE ALC.SITE_NAME = 'BA162_SAV70_SR7' 
+AND ALC.MAC_ADDRESS = '00-D0-F6-F3-16-31'
+AND ALC.SITE_ID = '10.2.22.21'
+AND ALC.OBJECT_FULL_NAME ='network:10.2.22.21:shelf-1:cardSlot-1:card:daughterCardSlot-2:daughterCard:port-6';
+--
+-- Merge B: actualizar los datos que estan en ALC_PHYSICALPORT_IPRAN_OBJ que no estan en XML_MEDIA_INDEPEND_STATS,
+-- update VALID_FINISH_DATE = sysdate
+-- Aproach: buscar todos las tupas SITE_NAME, SITE_ID, MAC_ADDRESS, OBJECT_FULL_NAME de ALC_PHYSICALPORT_IPRAN_OBJ que
+-- no estan en XML_MEDIA_INDEPEND_STATS y actualizar VALID_FINISH_DATE = sysdate (BAJA)
 
+UPDATE ALC_PHYSICALPORT_IPRAN_OBJ SET
+  VALID_FINISH_DATE = SYSDATE
+WHERE (SITE_ID,SITE_NAME,MAC_ADDRESS,OBJECT_FULL_NAME) IN (
+                                                          SELECT  SITE_ID
+                                                                  ,SITE_NAME
+                                                                  ,MAC_ADDRESS
+                                                                  ,OBJECT_FULL_NAME
+                                                          FROM  ALC_PHYSICALPORT_IPRAN_OBJ
+                                                          WHERE VALID_FINISH_DATE > SYSDATE
+                                                          MINUS
+                                                          SELECT  SITE_ID
+                                                                  ,SITE_NAME
+                                                                  ,MAC_ADDRESS
+                                                                  ,OBJECT_FULL_NAME
+                                                          FROM  (SELECT  /*+ INLINE */
+                                                                        MAC_ADDRESS
+                                                                        ,SITE_ID
+                                                                        ,SITE_NAME
+                                                                        ,OBJECT_FULL_NAME
+                                                                        ,ROW_NUMBER() OVER (PARTITION BY SITE_NAME,SITE_ID,MAC_ADDRESS,OBJECT_FULL_NAME 
+                                                                                            ORDER BY SITE_NAME,SITE_ID,MAC_ADDRESS,OBJECT_FULL_NAME) RN
+                                                                FROM XML_MEDIA_INDEPEND_STATS
+                                                                WHERE TO_CHAR(FECHA,'DD.MM.YYYY') = '05.12.2016'
+                                                                )
+                                                          WHERE RN = 1);
+ 
+--  
 --
 SELECT  SPECIFIC_TYPE	              ,
         DESCRIPTION	                ,
