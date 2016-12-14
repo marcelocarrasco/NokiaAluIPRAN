@@ -1,7 +1,13 @@
 CREATE OR REPLACE PACKAGE G_ALC_IPRAN AS 
+  /**
+  * Author: Carrasco Marcelo mailto: mcarrasco@harriague.com
+  * Date: 01/12/2016
+  * Comment: Paquete para conter la funcionalidad asociada a NOKIA ALU IPRAN.
+  */
   -- BULK COLLECT LIMIT
-  bulk_limit CONSTANT PLS_INTEGER := 100;
-   
+  bulk_limit  CONSTANT PLS_INTEGER := 100;
+  -- LIMITE DE FILAS PARA LA SUMARIZACION IBHW
+  limit_in    CONSTANT PLS_INTEGER  := 3; 
   -- PIPELINED FUNCTIONS
   FUNCTION GET_XML_M_I_STATS_1_DATA(P_FECHAHORA IN VARCHAR2) RETURN ALC_M_I_S_IPRAN_RAW_TY PIPELINED;
   FUNCTION GET_XML_SYSTEM_STATS_3_DATA(P_FECHAHORA IN VARCHAR2) RETURN ALC_S_C_S_IPRAN_TY PIPELINED;
@@ -10,6 +16,14 @@ CREATE OR REPLACE PACKAGE G_ALC_IPRAN AS
   FUNCTION GET_XML_NTWQOS_1_DATA(P_FECHAHORA IN VARCHAR2) RETURN ALC_L_IPRAN_SCNIOLR_RAW_TY PIPELINED;
   
   -- PROCEDURES
+  /**
+  * Insert los datos de la tabla XML_CARD_STATUS en la tabla ALC_CARDSLOT_IPRAN_OBJ
+  */
+  PROCEDURE ALC_CARDSLOT_IPRAN_OBJ_INS(P_FECHA IN VARCHAR2);
+  /**
+  * Insert los datos de la tabla XML_MEDIA_INDP_STATS en la tabla ALC_PHYSICALPORT_IPRAN_OBJ
+  */
+  PROCEDURE ALC_PHYSICALPORT_IPRAN_OBJ_INS(P_FECHA IN VARCHAR2);
   /**
   * Inserta los datos de la tabla XML_MEDIA_INDEPEND_STATS_1 en la tabla ALC_MEDIA_INDP_STATS_IPRAN_RAW
   */
@@ -31,13 +45,46 @@ CREATE OR REPLACE PACKAGE G_ALC_IPRAN AS
   */
   PROCEDURE ALC_L_I_SCNIOLR_RAW_INS(P_FECHAHORA IN VARCHAR2);
   /**
-  * Insert los datos de la tabla XML_CARD_STATUS en la tabla ALC_CARDSLOT_IPRAN_OBJ
+  * Inserta los datos de la ALC_MEDIA_INDP_STATS_IPRAN_RAW sumarizados a nivel HOUR en la tabla ALC_STATS_IPRAN_HOUR
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
   */
-  PROCEDURE ALC_CARDSLOT_IPRAN_OBJ_INS(P_FECHA IN VARCHAR2);
+  PROCEDURE ALC_STATS_IPRAN_HOUR_INS(P_FECHAHORA IN VARCHAR2);
   /**
-  * Insert los datos de la tabla XML_MEDIA_INDP_STATS en la tabla ALC_PHYSICALPORT_IPRAN_OBJ
+  * Inserta los datos de la ALC_STATS_IPRAN_HOUR sumarizados a nivel DAY en la tabla ALC_STATS_IPRAN_DAY
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
   */
-  PROCEDURE ALC_PHYSICALPORT_IPRAN_OBJ_INS(P_FECHA IN VARCHAR2);
+  --PROCEDURE ALC_STATS_IPRAN_DAY_INS(P_FECHAHORA IN VARCHAR2);
+  /**
+  * Inserta los datos de la ALC_STATS_IPRAN_HOUR sumarizados a nivel BH en la tabla ALC_STATS_IPRAN_BH
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
+  */
+  --PROCEDURE ALC_STATS_IPRAN_BH_INS(P_FECHAHORA IN VARCHAR2);
+  /**
+  * Inserta los datos de la ALC_STATS_IPRAN_BH sumarizados a nivel IBHW en la tabla ALC_STATS_IPRAN_IBHW
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
+  */
+  --PROCEDURE ALC_STATS_IPRAN_IBHW_INS(P_FECHAHORA IN VARCHAR2);
+  /**
+  * Inserta los datos de laS ALC_SYSTEM_CPU_STATS_IPRAN_RAW y ALC_SYSTEM_MEM_STATS_IPRAN_RAW sumarizados a nivel HOUR en
+  * la tabla  ALC_STATS_CPUMEM_HOUR
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
+  */
+  PROCEDURE ALC_STATS_CPUMEM_HOUR_INS(P_FECHAHORA IN VARCHAR2);
+  /**
+  * Inserta los datos de la tabla ALC_STATS_CPUMEM_HOUR sumarizados  a nivel DAY en la tabla ALC_STATS_CPUMEM_DAY
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
+  */
+  PROCEDURE ALC_STATS_CPUMEM_DAY_INS(P_FECHA IN VARCHAR2);
+  /**
+  * Inserta los datos de la tabla ALC_STATS_CPUMEM_HOUR sumarizados  a nivel BH en la tabla ALC_STATS_CPUMEM_BH
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
+  */
+  PROCEDURE ALC_STATS_CPUMEM_BH_INS(P_FECHA IN VARCHAR2);
+  /**
+  * Inserta los datos de la tabla ALC_STATS_CPUMEM_BH sumarizados  a nivel IBHW en la tabla ALC_STATS_CPUMEM_IBHW
+  * Param: P_FECHAHORA --> DD.MM.YYYY HH24
+  */
+  PROCEDURE ALC_STATS_CPUMEM_IBHW_INS(P_FECHA IN VARCHAR2);
 END G_ALC_IPRAN;
 /
 
@@ -796,6 +843,490 @@ CREATE OR REPLACE PACKAGE BODY G_ALC_IPRAN AS
           G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_PHYSICALPORT_IPRAN_OBJ_INS',SQLCODE,SQLERRM,'MERGE B --> '||DBMS_UTILITY.format_error_backtrace );
     END;
   END ALC_PHYSICALPORT_IPRAN_OBJ_INS;
+  --**--**--**--
+  PROCEDURE ALC_STATS_IPRAN_HOUR_INS(P_FECHAHORA IN VARCHAR2) AS
+    --
+    CURSOR  DATOS(FECHA_HORA VARCHAR2) IS
+    SELECT  TO_CHAR(FECHA,'DD.MM.YYYY HH24') FECHA
+            ,MONITORED_OBJECT_POINTER
+            ,MONITORED_OBJECT_SITE_ID
+            ,MONITORED_OBJECT_SITENAME
+            ,SUM(DROP_EVENTS_PERIODIC)
+            ,SUM(DROPPED_FRAMES_PERIODIC)
+            ,SUM(RECEIVED_PACKETS_PERIODIC)
+            ,SUM(TRANSMITTED_PACKETS_PERIODIC)
+            ,SUM(RECEIVED_OCTETS_PERIODIC)
+            ,SUM(TRANSMITTED_OCTETS_PERIODIC)
+            ,SUM(REC_NON_UNICAST_PAC_PERIODIC)
+            ,SUM(TRAN_NON_UNICAST_PAC_PERIODIC)
+            ,SUM(RECEIVED_BAD_PACKETS_PERIODIC)
+            ,SUM(TRAN_BAD_PACKETS_PERIODIC)
+            ,MAX(INPUT_SPEED)
+            ,MAX(OUTPUT_SPEED)
+            ,ROUND(AVG(IN_BANDWITH_UTIL),3)
+            ,ROUND(AVG(OUT_BANDWITH_UTIL),3)
+            ,SUM(REC_OCTETS)
+            ,SUM(TRANS_OCTETS)    
+    FROM  ALC_MEDIA_INDP_STATS_IPRAN_RAW
+    WHERE TO_CHAR(FECHA,'DD.MM.YYYY HH24') = FECHA_HORA
+    GROUP BY  TO_CHAR(FECHA,'DD.MM.YYYY HH24')
+              ,MONITORED_OBJECT_POINTER
+              ,MONITORED_OBJECT_SITE_ID
+              ,MONITORED_OBJECT_SITENAME;
+  --
+  --
+    L_ERRORS NUMBER;
+    L_ERRNO  NUMBER;
+    L_MSG    VARCHAR2(4000);
+    L_IDX    NUMBER;
+    -- END LOG --
+    TYPE TY_ALC_M_I_S_IPRAN_HOUR IS TABLE OF ALC_STATS_IPRAN_HOUR%ROWTYPE;
+    V_ALC_M_I_S_IPRAN_HOUR TY_ALC_M_I_S_IPRAN_HOUR;
+    --
+  BEGIN
+    EXECUTE IMMEDIATE 'alter session set nls_date_format = ''DD.MM.YYYY HH24:MI:SS''';
+    --
+    OPEN DATOS(P_FECHAHORA);
+    LOOP
+      FETCH DATOS BULK COLLECT INTO V_ALC_M_I_S_IPRAN_HOUR LIMIT bulk_limit;
+      BEGIN
+        FORALL fila IN 1 .. V_ALC_M_I_S_IPRAN_HOUR.COUNT SAVE EXCEPTIONS
+          INSERT INTO ALC_STATS_IPRAN_HOUR VALUES V_ALC_M_I_S_IPRAN_HOUR(fila);
+          
+        EXCEPTION
+            WHEN OTHERS THEN
+              -- Capture exceptions to perform operations DML
+              l_errors := sql%bulk_exceptions.count;
+              for i in 1 .. l_errors
+              loop
+                  l_errno := sql%bulk_exceptions(i).error_code;
+                  l_msg   := sqlerrm(-l_errno);
+                  L_IDX   := sql%BULK_EXCEPTIONS(I).ERROR_INDEX;
+                  
+                  G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_IPRAN_HOUR_INS',L_ERRNO,L_MSG,
+                                                'FECHA -->'                         ||V_ALC_M_I_S_IPRAN_HOUR(L_IDX).FECHA||' '||
+                                                'DROP_EVENTS_PERIODIC -->'          ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).DROP_EVENTS_PERIODIC)||' '||                                                
+                                                'DROPPED_FRAMES_PERIODIC -->'       ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).DROPPED_FRAMES_PERIODIC)||' '||
+                                                'RECEIVED_PACKETS_PERIODIC -->'     ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).RECEIVED_PACKETS_PERIODIC)||' '||
+                                                'TRANSMITTED_PACKETS_PERIODIC -->'  ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).TRANSMITTED_PACKETS_PERIODIC)||' '||
+                                                'RECEIVED_OCTETS_PERIODIC -->'      ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).RECEIVED_OCTETS_PERIODIC)||' '||
+                                                'TRANSMITTED_OCTETS_PERIODIC -->'   ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).TRANSMITTED_OCTETS_PERIODIC)||' '||
+                                                'RECEIVED_NON_UNI_PACK_PERIODIC -->'||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).RECEIVED_NON_UNI_PACK_PERIODIC)||' '||
+                                                'TRANS_NON_UNI_PACK_PERIODIC -->'   ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).TRANS_NON_UNI_PACK_PERIODIC)||' '||
+                                                'RECEIVED_BAD_PACKETS_PERIODIC -->' ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).RECEIVED_BAD_PACKETS_PERIODIC)||' '||
+                                                'TRANS_BAD_PACKETS_PERIODIC -->'    ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).TRANS_BAD_PACKETS_PERIODIC)||' '||
+                                                'INPUT_SPEED -->'                   ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).INPUT_SPEED)||' '||
+                                                'OUTPUT_SPEED -->'                  ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).OUTPUT_SPEED)||' '||
+                                                'MONITORED_OBJECT_POINTER -->'      ||V_ALC_M_I_S_IPRAN_HOUR(L_IDX).MONITORED_OBJECT_POINTER||' '||
+                                                'MONITORED_OBJECT_SITEID -->'       ||V_ALC_M_I_S_IPRAN_HOUR(L_IDX).MONITORED_OBJECT_SITEID||' '||
+                                                'MONITORED_OBJECT_SITE_NAME -->'    ||V_ALC_M_I_S_IPRAN_HOUR(L_IDX).MONITORED_OBJECT_SITE_NAME||' '||
+                                                'IN_BANDWITH_UTIL -->'              ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).IN_BANDWITH_UTIL)||' '||
+                                                'OUT_BANDWITH_UTIL -->'             ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).OUT_BANDWITH_UTIL)||' '||
+                                                'REC_OCTETS -->'                    ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).REC_OCTETS)||' '||
+                                                'TRANS_OCTETS -->'                  ||TO_CHAR(V_ALC_M_I_S_IPRAN_HOUR(L_IDX).TRANS_OCTETS));
+              end loop;
+          -- end --
+      END;
+      EXIT WHEN DATOS%NOTFOUND;
+    END LOOP;
+    COMMIT;
+    CLOSE DATOS;
+    EXCEPTION
+    WHEN OTHERS THEN
+      G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_IPRAN_HOUR_INS',SQLCODE,SQLERRM,DBMS_UTILITY.format_error_backtrace );
   
+  END ALC_STATS_IPRAN_HOUR_INS;
+  --**--**--**--
+  PROCEDURE ALC_STATS_CPUMEM_HOUR_INS(P_FECHAHORA IN VARCHAR2)  AS
+  --
+    CURSOR  DATOS(FECHA_HORA VARCHAR2) IS
+    SELECT  TO_CHAR(CPU.FECHA,'DD.MM.YYYY HH24')	        FECHA,
+            CPU.MONITORED_OBJECT_SITE_ID,
+            CPU.MONITORED_OBJECT_SITE_NAME,
+            ROUND(AVG(CPU.SYSTEM_CPU_USAGE),2)	          SYSTEM_CPU_USAGE,
+            ROUND(AVG(CPU.SYSTEM_CPU_USAGE),2)	          SYSTEM_CPU_USAGE_AVG,
+            ROUND(MAX(CPU.SYSTEM_CPU_USAGE),2)	          SYSTEM_CPU_USAGE_MAX,
+            ROUND(AVG(MEM.SYSTEM_MEMORY_USAGE),2)	        SYSTEM_MEMORY_USAGE,
+            ROUND(AVG(MEM.SMS_SYSTEM_MEMORY_USAGE_MB),2)	SYSTEM_MEMORY_USAGE_AVG_MB,
+            ROUND(MAX(MEM.SMS_SYSTEM_MEMORY_USAGE_MB),2)	SYSTEM_MEMORY_USAGE_MAX_MB,
+            ROUND(AVG(MEM.SMS_SYSTEM_MEMORY_USAGE_AVG),2)	SYSTEM_MEMORY_USAGE_AVG_PCT,
+            ROUND(MAX(MEM.SMS_SYSTEM_MEMORY_USAGE_AVG),2) SYSTEM_MEMORY_USAGE_MAX,
+            ROUND(AVG(MEM.AVAILABLE_MEMORY),2)	          AVAILABLE_MEMORY,
+            ROUND(AVG(MEM.AVMS_AVAILABLE_MEMORY_MB),2)	  AVAILABLE_MEMORY_AVG_MB,
+            ROUND(MAX(MEM.AVMS_AVAILABLE_MEMORY_MB),2)	  AVAILABLE_MEMORY_MAX_MB,
+            ROUND(AVG(MEM.AVMS_AVAILABLE_MEMORY_PCT),2)	  AVAILABLE_MEMORY_AVG_PCT,
+            ROUND(MAX(MEM.AVMS_AVAILABLE_MEMORY_PCT),2)	  AVAILABLE_MEMORY_MAX_PCT,
+            ROUND(AVG(MEM.ALLOCATED_MEMORY),2)	          ALLOCATED_MEMORY,
+            ROUND(SUM(MEM.AMS_ALLOCATED_MEMORY_MB),2)     ALLOCATED_MEMORY_MB
+    FROM  ALC_SYSTEM_CPU_STATS_IPRAN_RAW CPU,
+          ALC_SYSTEM_MEM_STATS_IPRAN_RAW MEM
+    WHERE TO_CHAR(CPU.FECHA,'DD.MM.YYYY HH24')  = FECHA_HORA
+    AND   TO_CHAR(CPU.FECHA,'DD.MM.YYYY HH24')  = TO_CHAR(MEM.FECHA,'DD.MM.YYYY HH24')
+    AND   CPU.MONITORED_OBJECT_SITE_ID          = MEM.MONITORED_OBJECT_SITE_ID
+    AND   CPU.MONITORED_OBJECT_SITE_NAME        = MEM.MONITORED_OBJECT_SITE_NAME
+    GROUP BY  TO_CHAR(CPU.FECHA,'DD.MM.YYYY HH24'),
+              CPU.MONITORED_OBJECT_SITE_ID,
+              CPU.MONITORED_OBJECT_SITE_NAME;
+  --
+    L_ERRORS NUMBER;
+    L_ERRNO  NUMBER;
+    L_MSG    VARCHAR2(4000);
+    L_IDX    NUMBER;
+    -- END LOG --
+    TYPE TY_ALC_STATS_CPUMEM_IPRAN_HOUR IS TABLE OF ALC_STATS_CPUMEM_HOUR%ROWTYPE;
+    V_ALC_STATS_CPUMEM_IPRAN_H TY_ALC_STATS_CPUMEM_IPRAN_HOUR;
+    --
+  BEGIN
+    EXECUTE IMMEDIATE 'alter session set nls_date_format = ''DD.MM.YYYY HH24:MI:SS''';
+    --
+    OPEN DATOS(P_FECHAHORA);
+    LOOP
+      FETCH DATOS BULK COLLECT INTO V_ALC_STATS_CPUMEM_IPRAN_H LIMIT bulk_limit;
+      BEGIN
+        FORALL fila IN 1 .. V_ALC_STATS_CPUMEM_IPRAN_H.COUNT SAVE EXCEPTIONS
+          INSERT INTO ALC_STATS_CPUMEM_HOUR VALUES V_ALC_STATS_CPUMEM_IPRAN_H(fila);
+          
+        EXCEPTION
+            WHEN OTHERS THEN
+              -- Capture exceptions to perform operations DML
+              l_errors := sql%bulk_exceptions.count;
+              for i in 1 .. l_errors
+              loop
+                  l_errno := sql%bulk_exceptions(i).error_code;
+                  l_msg   := sqlerrm(-l_errno);
+                  L_IDX   := sql%BULK_EXCEPTIONS(I).ERROR_INDEX;
+
+                  G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_HOUR_INS',L_ERRNO,L_MSG,
+                                                'FECHA -->'                       ||V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).FECHA||' '||
+                                                'MONITORED_OBJECT_SITE_ID -->'    ||V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).MONITORED_OBJECT_SITE_ID||' '||                                                
+                                                'MONITORED_OBJECT_SITE_NAME -->'  ||V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).MONITORED_OBJECT_SITE_NAME||' '||
+                                                'SYSTEM_CPU_USAGE -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_CPU_USAGE)||' '||
+                                                'SYSTEM_CPU_USAGE_AVG -->'        ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_CPU_USAGE_AVG)||' '||
+                                                'SYSTEM_CPU_USAGE_MAX -->'        ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_CPU_USAGE_MAX)||' '||
+                                                'SYSTEM_MEMORY_USAGE -->'         ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_MEMORY_USAGE)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_MB -->'  ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_MEMORY_USAGE_AVG_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_MB -->'  ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_MEMORY_USAGE_MAX_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_PCT -->' ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_MEMORY_USAGE_AVG_PCT)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_PCT -->' ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).SYSTEM_MEMORY_USAGE_MAX_PCT)||' '||
+                                                'AVAILABLE_MEMORY -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).AVAILABLE_MEMORY)||' '||
+                                                'AVAILABLE_MEMORY_AVG_MB -->'     ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).AVAILABLE_MEMORY_AVG_MB)||' '||
+                                                'AVAILABLE_MEMORY_MAX_MB -->'     ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).AVAILABLE_MEMORY_MAX_MB)||' '||
+                                                'AVAILABLE_MEMORY_AVG_PCT -->'    ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).AVAILABLE_MEMORY_AVG_PCT)||' '||
+                                                'AVAILABLE_MEMORY_MAX_PCT -->'    ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).AVAILABLE_MEMORY_MAX_PCT)||' '||
+                                                'ALLOCATED_MEMORY -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).ALLOCATED_MEMORY)||' '||
+                                                'ALLOCATED_MEMORY_MB -->'         ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_H(L_IDX).ALLOCATED_MEMORY_MB));
+              end loop;
+          -- end --
+      END;
+      EXIT WHEN DATOS%NOTFOUND;
+    END LOOP;
+    COMMIT;
+    CLOSE DATOS;
+    EXCEPTION
+    WHEN OTHERS THEN
+      G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_HOUR_INS',SQLCODE,SQLERRM,DBMS_UTILITY.format_error_backtrace );
+      
+  END ALC_STATS_CPUMEM_HOUR_INS;
+  --**--**--**--
+  PROCEDURE ALC_STATS_CPUMEM_DAY_INS(P_FECHA IN VARCHAR2) AS
+    CURSOR  DATOS(DIA VARCHAR2) IS
+    SELECT  TRUNC(FECHA) FECHA,
+            MONITORED_OBJECT_SITE_ID,
+            MONITORED_OBJECT_SITE_NAME,
+            ROUND(AVG(SYSTEM_CPU_USAGE),2)	          SYSTEM_CPU_USAGE,
+            ROUND(AVG(SYSTEM_CPU_USAGE_AVG),2)	      SYSTEM_CPU_USAGE_AVG,
+            ROUND(MAX(SYSTEM_CPU_USAGE_MAX),2)	      SYSTEM_CPU_USAGE_MAX,
+            ROUND(AVG(SYSTEM_MEMORY_USAGE),2)	        SYSTEM_MEMORY_USAGE,
+            ROUND(AVG(SYSTEM_MEMORY_USAGE_AVG_MB),2)	SYSTEM_MEMORY_USAGE_AVG_MB,
+            ROUND(MAX(SYSTEM_MEMORY_USAGE_MAX_MB),2)	SYSTEM_MEMORY_USAGE_MAX_MB,
+            ROUND(AVG(SYSTEM_MEMORY_USAGE_AVG_PCT),2)	SYSTEM_MEMORY_USAGE_AVG_PCT,
+            ROUND(MAX(SYSTEM_MEMORY_USAGE_MAX_PCT),2) SYSTEM_MEMORY_USAGE_MAX_PCT,
+            ROUND(AVG(AVAILABLE_MEMORY),2)	          AVAILABLE_MEMORY,
+            ROUND(AVG(AVAILABLE_MEMORY_AVG_MB),2)	    AVAILABLE_MEMORY_AVG_MB,
+            ROUND(MAX(AVAILABLE_MEMORY_MAX_MB),2)	    AVAILABLE_MEMORY_MAX_MB,
+            ROUND(AVG(AVAILABLE_MEMORY_AVG_PCT),2)	  AVAILABLE_MEMORY_AVG_PCT,
+            ROUND(MAX(AVAILABLE_MEMORY_MAX_PCT),2)	  AVAILABLE_MEMORY_MAX_PCT,
+            ROUND(AVG(ALLOCATED_MEMORY),2)	          ALLOCATED_MEMORY,
+            ROUND(SUM(ALLOCATED_MEMORY_MB),2)         ALLOCATED_MEMORY_MB
+    FROM  ALC_STATS_CPUMEM_HOUR
+    WHERE TRUNC(FECHA) = TO_DATE(DIA) 
+    GROUP BY  TRUNC(FECHA),
+              MONITORED_OBJECT_SITE_ID,
+              MONITORED_OBJECT_SITE_NAME;
+    --
+    L_ERRORS NUMBER;
+    L_ERRNO  NUMBER;
+    L_MSG    VARCHAR2(4000);
+    L_IDX    NUMBER;
+    -- END LOG --
+    TYPE TY_ALC_STATS_CPUMEM_IPRAN_DAY IS TABLE OF ALC_STATS_CPUMEM_DAY%ROWTYPE;
+    V_ALC_STATS_CPUMEM_IPRAN_D TY_ALC_STATS_CPUMEM_IPRAN_DAY;
+  BEGIN
+    EXECUTE IMMEDIATE 'alter session set nls_date_format = ''DD.MM.YYYY HH24:MI:SS''';
+    --
+    OPEN DATOS(P_FECHA);
+    LOOP
+      FETCH DATOS BULK COLLECT INTO V_ALC_STATS_CPUMEM_IPRAN_D LIMIT bulk_limit;
+      BEGIN
+        FORALL fila IN 1 .. V_ALC_STATS_CPUMEM_IPRAN_D.COUNT SAVE EXCEPTIONS
+          INSERT INTO ALC_STATS_CPUMEM_DAY VALUES V_ALC_STATS_CPUMEM_IPRAN_D(fila);
+          
+        EXCEPTION
+            WHEN OTHERS THEN
+              -- Capture exceptions to perform operations DML
+              l_errors := sql%bulk_exceptions.count;
+              for i in 1 .. l_errors
+              loop
+                  l_errno := sql%bulk_exceptions(i).error_code;
+                  l_msg   := sqlerrm(-l_errno);
+                  L_IDX   := sql%BULK_EXCEPTIONS(I).ERROR_INDEX;
+
+                  G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_DAY_INS',L_ERRNO,L_MSG,
+                                                'FECHA -->'                       ||V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).FECHA||' '||
+                                                'MONITORED_OBJECT_SITE_ID -->'    ||V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).MONITORED_OBJECT_SITE_ID||' '||                                                
+                                                'MONITORED_OBJECT_SITE_NAME -->'  ||V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).MONITORED_OBJECT_SITE_NAME||' '||
+                                                'SYSTEM_CPU_USAGE -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_CPU_USAGE)||' '||
+                                                'SYSTEM_CPU_USAGE_AVG -->'        ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_CPU_USAGE_AVG)||' '||
+                                                'SYSTEM_CPU_USAGE_MAX -->'        ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_CPU_USAGE_MAX)||' '||
+                                                'SYSTEM_MEMORY_USAGE -->'         ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_MEMORY_USAGE)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_MB -->'  ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_MEMORY_USAGE_AVG_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_MB -->'  ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_MEMORY_USAGE_MAX_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_PCT -->' ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_MEMORY_USAGE_AVG_PCT)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_PCT -->' ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).SYSTEM_MEMORY_USAGE_MAX_PCT)||' '||
+                                                'AVAILABLE_MEMORY -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).AVAILABLE_MEMORY)||' '||
+                                                'AVAILABLE_MEMORY_AVG_MB -->'     ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).AVAILABLE_MEMORY_AVG_MB)||' '||
+                                                'AVAILABLE_MEMORY_MAX_MB -->'     ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).AVAILABLE_MEMORY_MAX_MB)||' '||
+                                                'AVAILABLE_MEMORY_AVG_PCT -->'    ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).AVAILABLE_MEMORY_AVG_PCT)||' '||
+                                                'AVAILABLE_MEMORY_MAX_PCT -->'    ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).AVAILABLE_MEMORY_MAX_PCT)||' '||
+                                                'ALLOCATED_MEMORY -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).ALLOCATED_MEMORY)||' '||
+                                                'ALLOCATED_MEMORY_MB -->'         ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_D(L_IDX).ALLOCATED_MEMORY_MB));
+              end loop;
+          -- end --
+      END;
+      EXIT WHEN DATOS%NOTFOUND;
+    END LOOP;
+    COMMIT;
+    CLOSE DATOS;
+    EXCEPTION
+    WHEN OTHERS THEN
+      G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_DAY_INS',SQLCODE,SQLERRM,DBMS_UTILITY.format_error_backtrace );
+      
+  END ALC_STATS_CPUMEM_DAY_INS;
+  --**--**--**--**--
+  PROCEDURE ALC_STATS_CPUMEM_BH_INS(P_FECHA IN VARCHAR2)  AS
+    CURSOR  DATOS(DIA VARCHAR2) IS
+    SELECT  FECHA,
+            MONITORED_OBJECT_SITE_ID,
+            MONITORED_OBJECT_SITE_NAME,
+            SYSTEM_CPU_USAGE,
+            SYSTEM_CPU_USAGE_AVG,
+            SYSTEM_CPU_USAGE_MAX,
+            SYSTEM_MEMORY_USAGE,
+            SYSTEM_MEMORY_USAGE_AVG_MB,
+            SYSTEM_MEMORY_USAGE_MAX_MB,
+            SYSTEM_MEMORY_USAGE_AVG_PCT,
+            SYSTEM_MEMORY_USAGE_MAX_PCT,
+            AVAILABLE_MEMORY,
+            AVAILABLE_MEMORY_AVG_MB,
+            AVAILABLE_MEMORY_MAX_MB,
+            AVAILABLE_MEMORY_AVG_PCT,
+            AVAILABLE_MEMORY_MAX_PCT,
+            ALLOCATED_MEMORY,
+            ALLOCATED_MEMORY_MB
+    FROM  (SELECT FECHA,
+                  MONITORED_OBJECT_SITE_ID,
+                  MONITORED_OBJECT_SITE_NAME,
+                  SYSTEM_CPU_USAGE,
+                  SYSTEM_CPU_USAGE_AVG,
+                  SYSTEM_CPU_USAGE_MAX,
+                  SYSTEM_MEMORY_USAGE,
+                  SYSTEM_MEMORY_USAGE_AVG_MB,
+                  SYSTEM_MEMORY_USAGE_MAX_MB,
+                  SYSTEM_MEMORY_USAGE_AVG_PCT,
+                  SYSTEM_MEMORY_USAGE_MAX_PCT,
+                  AVAILABLE_MEMORY,
+                  AVAILABLE_MEMORY_AVG_MB,
+                  AVAILABLE_MEMORY_MAX_MB,
+                  AVAILABLE_MEMORY_AVG_PCT,
+                  AVAILABLE_MEMORY_MAX_PCT,
+                  ALLOCATED_MEMORY,
+                  ALLOCATED_MEMORY_MB,
+                  ROW_NUMBER() OVER (PARTITION BY  TRUNC(FECHA),
+                                                  MONITORED_OBJECT_SITE_ID,
+                                                  MONITORED_OBJECT_SITE_NAME
+                                    ORDER BY  SYSTEM_CPU_USAGE DESC) RN
+          FROM  ALC_STATS_CPUMEM_HOUR
+          WHERE TRUNC(FECHA) = TO_DATE(DIA)
+        )
+    WHERE RN = 1;
+    --
+    L_ERRORS NUMBER;
+    L_ERRNO  NUMBER;
+    L_MSG    VARCHAR2(4000);
+    L_IDX    NUMBER;
+    -- END LOG --
+    TYPE TY_ALC_STATS_CPUMEM_IPRAN_BH IS TABLE OF ALC_STATS_CPUMEM_BH%ROWTYPE;
+    V_ALC_STATS_CPUMEM_IPRAN_BH TY_ALC_STATS_CPUMEM_IPRAN_BH;
+  BEGIN
+    EXECUTE IMMEDIATE 'alter session set nls_date_format = ''DD.MM.YYYY HH24:MI:SS''';
+    --
+    OPEN DATOS(P_FECHA);
+    LOOP
+      FETCH DATOS BULK COLLECT INTO V_ALC_STATS_CPUMEM_IPRAN_BH LIMIT bulk_limit;
+      BEGIN
+        FORALL fila IN 1 .. V_ALC_STATS_CPUMEM_IPRAN_BH.COUNT SAVE EXCEPTIONS
+          INSERT INTO ALC_STATS_CPUMEM_BH VALUES V_ALC_STATS_CPUMEM_IPRAN_BH(fila);
+          
+        EXCEPTION
+            WHEN OTHERS THEN
+              -- Capture exceptions to perform operations DML
+              l_errors := sql%bulk_exceptions.count;
+              for i in 1 .. l_errors
+              loop
+                  l_errno := sql%bulk_exceptions(i).error_code;
+                  l_msg   := sqlerrm(-l_errno);
+                  L_IDX   := sql%BULK_EXCEPTIONS(I).ERROR_INDEX;
+
+                  G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_BH_INS',L_ERRNO,L_MSG,
+                                                'FECHA -->'                       ||V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).FECHA||' '||
+                                                'MONITORED_OBJECT_SITE_ID -->'    ||V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).MONITORED_OBJECT_SITE_ID||' '||                                                
+                                                'MONITORED_OBJECT_SITE_NAME -->'  ||V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).MONITORED_OBJECT_SITE_NAME||' '||
+                                                'SYSTEM_CPU_USAGE -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_CPU_USAGE)||' '||
+                                                'SYSTEM_CPU_USAGE_AVG -->'        ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_CPU_USAGE_AVG)||' '||
+                                                'SYSTEM_CPU_USAGE_MAX -->'        ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_CPU_USAGE_MAX)||' '||
+                                                'SYSTEM_MEMORY_USAGE -->'         ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_MEMORY_USAGE)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_MB -->'  ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_MEMORY_USAGE_AVG_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_MB -->'  ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_MEMORY_USAGE_MAX_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_PCT -->' ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_MEMORY_USAGE_AVG_PCT)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_PCT -->' ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).SYSTEM_MEMORY_USAGE_MAX_PCT)||' '||
+                                                'AVAILABLE_MEMORY -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).AVAILABLE_MEMORY)||' '||
+                                                'AVAILABLE_MEMORY_AVG_MB -->'     ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).AVAILABLE_MEMORY_AVG_MB)||' '||
+                                                'AVAILABLE_MEMORY_MAX_MB -->'     ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).AVAILABLE_MEMORY_MAX_MB)||' '||
+                                                'AVAILABLE_MEMORY_AVG_PCT -->'    ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).AVAILABLE_MEMORY_AVG_PCT)||' '||
+                                                'AVAILABLE_MEMORY_MAX_PCT -->'    ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).AVAILABLE_MEMORY_MAX_PCT)||' '||
+                                                'ALLOCATED_MEMORY -->'            ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).ALLOCATED_MEMORY)||' '||
+                                                'ALLOCATED_MEMORY_MB -->'         ||TO_CHAR(V_ALC_STATS_CPUMEM_IPRAN_BH(L_IDX).ALLOCATED_MEMORY_MB));
+              end loop;
+          -- end --
+      END;
+      EXIT WHEN DATOS%NOTFOUND;
+    END LOOP;
+    COMMIT;
+    CLOSE DATOS;
+    EXCEPTION
+    WHEN OTHERS THEN
+      G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_BH_INS',SQLCODE,SQLERRM,DBMS_UTILITY.format_error_backtrace );
+      
+  END ALC_STATS_CPUMEM_BH_INS;
+  --**--**--**--
+  PROCEDURE ALC_STATS_CPUMEM_IBHW_INS(P_FECHA IN VARCHAR2)  AS
+    --
+    CURSOR  DATOS(DIA VARCHAR2) IS
+    SELECT  FECHA,
+            MONITORED_OBJECT_SITE_ID,
+            MONITORED_OBJECT_SITE_NAME,
+            ROUND(AVG(SYSTEM_CPU_USAGE),2)	          SYSTEM_CPU_USAGE,
+            ROUND(AVG(SYSTEM_CPU_USAGE_AVG),2)	      SYSTEM_CPU_USAGE_AVG,
+            ROUND(MAX(SYSTEM_CPU_USAGE_MAX),2)	      SYSTEM_CPU_USAGE_MAX,
+            ROUND(AVG(SYSTEM_MEMORY_USAGE),2)	        SYSTEM_MEMORY_USAGE,
+            ROUND(AVG(SYSTEM_MEMORY_USAGE_AVG_MB),2)	SYSTEM_MEMORY_USAGE_AVG_MB,
+            ROUND(MAX(SYSTEM_MEMORY_USAGE_MAX_MB),2)	SYSTEM_MEMORY_USAGE_MAX_MB,
+            ROUND(AVG(SYSTEM_MEMORY_USAGE_AVG_PCT),2)	SYSTEM_MEMORY_USAGE_AVG_PCT,
+            ROUND(MAX(SYSTEM_MEMORY_USAGE_MAX_PCT),2) SYSTEM_MEMORY_USAGE_MAX_PCT,
+            ROUND(AVG(AVAILABLE_MEMORY),2)	          AVAILABLE_MEMORY,
+            ROUND(AVG(AVAILABLE_MEMORY_AVG_MB),2)	    AVAILABLE_MEMORY_AVG_MB,
+            ROUND(MAX(AVAILABLE_MEMORY_MAX_MB),2)	    AVAILABLE_MEMORY_MAX_MB,
+            ROUND(AVG(AVAILABLE_MEMORY_AVG_PCT),2)	  AVAILABLE_MEMORY_AVG_PCT,
+            ROUND(MAX(AVAILABLE_MEMORY_MAX_PCT),2)	  AVAILABLE_MEMORY_MAX_PCT,
+            ROUND(AVG(ALLOCATED_MEMORY),2)	          ALLOCATED_MEMORY,
+            ROUND(SUM(ALLOCATED_MEMORY_MB),2)         ALLOCATED_MEMORY_MB
+    FROM  (SELECT DIA  FECHA,
+                  MONITORED_OBJECT_SITE_ID,
+                  MONITORED_OBJECT_SITE_NAME,
+                  SYSTEM_CPU_USAGE,
+                  SYSTEM_CPU_USAGE_AVG,
+                  SYSTEM_CPU_USAGE_MAX,
+                  SYSTEM_MEMORY_USAGE,
+                  SYSTEM_MEMORY_USAGE_AVG_MB,
+                  SYSTEM_MEMORY_USAGE_MAX_MB,
+                  SYSTEM_MEMORY_USAGE_AVG_PCT,
+                  SYSTEM_MEMORY_USAGE_MAX_PCT,
+                  AVAILABLE_MEMORY,
+                  AVAILABLE_MEMORY_AVG_MB,
+                  AVAILABLE_MEMORY_MAX_MB,
+                  AVAILABLE_MEMORY_AVG_PCT,
+                  AVAILABLE_MEMORY_MAX_PCT,
+                  ALLOCATED_MEMORY,
+                  ALLOCATED_MEMORY_MB,
+                  ROW_NUMBER() OVER (PARTITION BY TRUNC(FECHA),
+                                                  MONITORED_OBJECT_SITE_ID,
+                                                  MONITORED_OBJECT_SITE_NAME
+                                    ORDER BY  SYSTEM_CPU_USAGE DESC) RN
+          FROM  ALC_STATS_CPUMEM_HOUR
+          WHERE TRUNC(FECHA) = TO_DATE(DIA)
+        )
+    WHERE RN <= limit_in
+    GROUP BY  FECHA,
+              MONITORED_OBJECT_SITE_ID,
+              MONITORED_OBJECT_SITE_NAME;
+    --
+    L_ERRORS NUMBER;
+    L_ERRNO  NUMBER;
+    L_MSG    VARCHAR2(4000);
+    L_IDX    NUMBER;
+    -- END LOG --
+    TYPE TY_ALC_S_CM_IPRAN_IBHW IS TABLE OF ALC_STATS_CPUMEM_IBHW%ROWTYPE;
+    V_ALC_S_CM_IPRAN_IBHW TY_ALC_S_CM_IPRAN_IBHW;
+  BEGIN
+    EXECUTE IMMEDIATE 'alter session set nls_date_format = ''DD.MM.YYYY HH24:MI:SS''';
+    --
+    OPEN DATOS(P_FECHA);
+    LOOP
+      FETCH DATOS BULK COLLECT INTO V_ALC_S_CM_IPRAN_IBHW LIMIT bulk_limit;
+      BEGIN
+        FORALL fila IN 1 .. V_ALC_S_CM_IPRAN_IBHW.COUNT SAVE EXCEPTIONS
+          INSERT INTO ALC_STATS_CPUMEM_IBHW VALUES V_ALC_S_CM_IPRAN_IBHW(fila);
+          
+        EXCEPTION
+            WHEN OTHERS THEN
+              -- Capture exceptions to perform operations DML
+              l_errors := sql%bulk_exceptions.count;
+              for i in 1 .. l_errors
+              loop
+                  l_errno := sql%bulk_exceptions(i).error_code;
+                  l_msg   := sqlerrm(-l_errno);
+                  L_IDX   := sql%BULK_EXCEPTIONS(I).ERROR_INDEX;
+
+                  G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_IBHW_INS',L_ERRNO,L_MSG,
+                                                'FECHA -->'                       ||V_ALC_S_CM_IPRAN_IBHW(L_IDX).FECHA||' '||
+                                                'MONITORED_OBJECT_SITE_ID -->'    ||V_ALC_S_CM_IPRAN_IBHW(L_IDX).MONITORED_OBJECT_SITE_ID||' '||                                                
+                                                'MONITORED_OBJECT_SITE_NAME -->'  ||V_ALC_S_CM_IPRAN_IBHW(L_IDX).MONITORED_OBJECT_SITE_NAME||' '||
+                                                'SYSTEM_CPU_USAGE -->'            ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_CPU_USAGE)||' '||
+                                                'SYSTEM_CPU_USAGE_AVG -->'        ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_CPU_USAGE_AVG)||' '||
+                                                'SYSTEM_CPU_USAGE_MAX -->'        ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_CPU_USAGE_MAX)||' '||
+                                                'SYSTEM_MEMORY_USAGE -->'         ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_MEMORY_USAGE)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_MB -->'  ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_MEMORY_USAGE_AVG_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_MB -->'  ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_MEMORY_USAGE_MAX_MB)||' '||
+                                                'SYSTEM_MEMORY_USAGE_AVG_PCT -->' ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_MEMORY_USAGE_AVG_PCT)||' '||
+                                                'SYSTEM_MEMORY_USAGE_MAX_PCT -->' ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).SYSTEM_MEMORY_USAGE_MAX_PCT)||' '||
+                                                'AVAILABLE_MEMORY -->'            ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).AVAILABLE_MEMORY)||' '||
+                                                'AVAILABLE_MEMORY_AVG_MB -->'     ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).AVAILABLE_MEMORY_AVG_MB)||' '||
+                                                'AVAILABLE_MEMORY_MAX_MB -->'     ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).AVAILABLE_MEMORY_MAX_MB)||' '||
+                                                'AVAILABLE_MEMORY_AVG_PCT -->'    ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).AVAILABLE_MEMORY_AVG_PCT)||' '||
+                                                'AVAILABLE_MEMORY_MAX_PCT -->'    ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).AVAILABLE_MEMORY_MAX_PCT)||' '||
+                                                'ALLOCATED_MEMORY -->'            ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).ALLOCATED_MEMORY)||' '||
+                                                'ALLOCATED_MEMORY_MB -->'         ||TO_CHAR(V_ALC_S_CM_IPRAN_IBHW(L_IDX).ALLOCATED_MEMORY_MB));
+              end loop;
+          -- end --
+      END;
+      EXIT WHEN DATOS%NOTFOUND;
+    END LOOP;
+    COMMIT;
+    CLOSE DATOS;
+    EXCEPTION
+    WHEN OTHERS THEN
+      G_ERROR_LOG_NEW.P_LOG_ERROR('ALC_STATS_CPUMEM_IBHW_INS',SQLCODE,SQLERRM,DBMS_UTILITY.format_error_backtrace );
+      
+  END ALC_STATS_CPUMEM_IBHW_INS;
 END G_ALC_IPRAN;
 /

@@ -25,12 +25,22 @@ truncate table XML_NTWQOS;
 truncate table XML_NTWQOS_1;
 truncate table XML_CARD_STATUS;
 
-truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;                                  
-truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
-truncate table ALC_PHYSICALPORT_IPRAN_OBJ;                                      
-truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;                                      
+--------------------------------------------------------------------------------
+truncate table ALC_STATS_CPUMEM_BH;                                             
+truncate table ALC_STATS_CPUMEM_DAY;                                            
+truncate table ALC_STATS_CPUMEM_IBHW;                                           
+truncate table ALC_STATS_IPRAN_BH;                                              
+truncate table ALC_STATS_IPRAN_DAY;                                             
+truncate table ALC_STATS_IPRAN_IBHW;                                            
+truncate table ALC_CARDSLOT_IPRAN_OBJ;                                          
 truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;                                      
-truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW; 
+truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;                                      
+truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;                                  
+truncate table ALC_PHYSICALPORT_IPRAN_OBJ;                                      
+truncate table ALC_STATS_CPUMEM_HOUR;                                           
+truncate table ALC_STATS_IPRAN_HOUR;                                            
+truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
+truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW; 
 
 
 select 'truncate table '||table_name||';'
@@ -77,4 +87,21 @@ select  substr('2016120109',7,2)||'.'||
         substr('2016120109',1,4)||
         ' '||
         substr('2016120109',9,2)
-from dual
+from dual;
+
+--
+-- drop table process_to_run purge;
+create table process_to_run(
+process_name  varchar2(500 char) not null primary key,
+params        varchar2(500 char),
+fecha_to_run  varchar2(13 char) not null,
+tipo          varchar2(50 char) not null,
+grupo         varchar2(50 char) not null,
+status        number(1) default 1 not null,
+procesado     date
+) nologging nocompress;
+alter table process_to_run add constraint chk_process_to_run check (tipo in ('Hourly','Daily','Weekly','Monthly'));
+
+comment on table process_to_run is 'Contiene todos los procesos PENTAHO (.kjb) que se ejecutaran, funciona como una cola';
+comment on column process_to_run.fecha_to_run is 'Representa la fecha-hora que se pasara como parametro al Job';
+
