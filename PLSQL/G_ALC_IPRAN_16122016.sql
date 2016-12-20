@@ -296,6 +296,7 @@ CREATE OR REPLACE PACKAGE BODY G_ALC_IPRAN AS
     V_ALC_S_C_S_IPRAN_RAW TY_ALC_S_C_S_IPRAN_RAW;
     --
      V_FECHAHORA VARCHAR2(13 CHAR) := '';
+    --
   BEGIN
     -- Genero el formato de fecha DD.MM.YYYY HH24 en funcion de param. de entrada P_FECHAHORA (YYYYMMDDHH24)
     SELECT  SUBSTR(P_FECHAHORA,7,2)||'.'||
@@ -314,6 +315,8 @@ CREATE OR REPLACE PACKAGE BODY G_ALC_IPRAN AS
           INSERT INTO ALC_SYSTEM_CPU_STATS_IPRAN_RAW VALUES V_ALC_S_C_S_IPRAN_RAW(fila);
           
         EXCEPTION
+            WHEN DUP_VAL_ON_INDEX THEN
+              NULL;
             WHEN OTHERS THEN
               -- Capture exceptions to perform operations DML
               l_errors := sql%bulk_exceptions.count;
@@ -322,14 +325,14 @@ CREATE OR REPLACE PACKAGE BODY G_ALC_IPRAN AS
                   l_errno := sql%bulk_exceptions(i).error_code;
                   l_msg   := sqlerrm(-l_errno);
                   L_IDX   := sql%BULK_EXCEPTIONS(I).ERROR_INDEX;
-                  
+
                   G_ERROR_LOG_NEW.P_LOG_ERROR('INS_ALC_S_C_S_IPRAN_RAW',L_ERRNO,L_MSG,
                                                 'FECHA -->'                      ||V_ALC_S_C_S_IPRAN_RAW(L_IDX).FECHA||' '||
                                                 'SYSTEM_CPU_USAGE -->'           ||TO_CHAR(V_ALC_S_C_S_IPRAN_RAW(L_IDX).SYSTEM_CPU_USAGE)||' '||                                                
                                                 'TIME_CAPTURED  -->'             ||TO_CHAR(V_ALC_S_C_S_IPRAN_RAW(L_IDX).TIME_CAPTURED)||' '||
                                                 'PERIODIC_TIME -->'              ||TO_CHAR(V_ALC_S_C_S_IPRAN_RAW(L_IDX).PERIODIC_TIME)||' '||
                                                 'MONITORED_OBJECT_SITE_ID -->'   ||V_ALC_S_C_S_IPRAN_RAW(L_IDX).MONITORED_OBJECT_SITE_ID||' '||                                                
-                                                'MONITORED_OBJECT_SITE_NAME -->' ||V_ALC_S_C_S_IPRAN_RAW(L_IDX).MONITORED_OBJECT_SITE_NAME);
+                                                'MONITORED_OBJECT_SITE_NAME -->' ||V_ALC_S_C_S_IPRAN_RAW(L_IDX).MONITORED_OBJECT_SITE_NAME);                              
               end loop;
           -- end --
       END;

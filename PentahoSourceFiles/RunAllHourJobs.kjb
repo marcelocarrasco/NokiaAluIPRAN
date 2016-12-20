@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>SystemStatsXml_1_2_EndToEnd</name>
+  <name>RunAllHourJobs</name>
     <description/>
     <extended_description/>
     <job_version/>
+    <job_status>0</job_status>
   <directory>&#x2f;</directory>
   <created_user>-</created_user>
-  <created_date>2016&#x2f;12&#x2f;01 15&#x3a;50&#x3a;25.170</created_date>
+  <created_date>2016&#x2f;12&#x2f;19 16&#x3a;33&#x3a;11.847</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2016&#x2f;12&#x2f;01 15&#x3a;50&#x3a;25.170</modified_date>
+  <modified_date>2016&#x2f;12&#x2f;19 16&#x3a;33&#x3a;11.847</modified_date>
     <parameters>
+        <parameter>
+            <name>FECHA-PROC</name>
+            <default_value/>
+            <description/>
+        </parameter>
     </parameters>
     <slaveservers>
     </slaveservers>
@@ -51,120 +57,27 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>128</xloc>
-      <yloc>192</yloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
-      <name>SystemStatsXmlEndToEnd</name>
-      <description/>
-      <type>JOB</type>
-      <specification_method>filename</specification_method>
-      <job_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;SystemStatsXmlEndToEnd.kjb</filename>
-      <jobname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Nothing</loglevel>
-      <slave_server_name/>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <expand_remote_job>N</expand_remote_job>
-      <create_parent_folder>N</create_parent_folder>
-      <pass_export>N</pass_export>
-      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>      <set_append_logfile>N</set_append_logfile>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>272</xloc>
-      <yloc>192</yloc>
-      </entry>
-    <entry>
-      <name>SystemStatsXmlUnoEndToEnd</name>
-      <description/>
-      <type>JOB</type>
-      <specification_method>filename</specification_method>
-      <job_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;SystemStatsXmlUnoEndToEnd.kjb</filename>
-      <jobname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Nothing</loglevel>
-      <slave_server_name/>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <expand_remote_job>N</expand_remote_job>
-      <create_parent_folder>N</create_parent_folder>
-      <pass_export>N</pass_export>
-      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>      <set_append_logfile>N</set_append_logfile>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>496</xloc>
-      <yloc>192</yloc>
-      </entry>
-    <entry>
-      <name>SystemStatsXmlDosEndToEnd</name>
-      <description/>
-      <type>JOB</type>
-      <specification_method>filename</specification_method>
-      <job_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;SystemStatsXmlDosEndToEnd.kjb</filename>
-      <jobname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Nothing</loglevel>
-      <slave_server_name/>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <expand_remote_job>N</expand_remote_job>
-      <create_parent_folder>N</create_parent_folder>
-      <pass_export>N</pass_export>
-      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>      <set_append_logfile>N</set_append_logfile>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>720</xloc>
-      <yloc>192</yloc>
-      </entry>
-    <entry>
-      <name>Pop. ALC_SYSTEM_MEM_STATS_IPRAN_RAW Table</name>
+      <name>Get All HOUR Jobs</name>
       <description/>
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;PopulateALC_SYSTEM_MEM_STATS_IPRAN_RAWTable.ktr</filename>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;GetAllHOURProcessToRun.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
       <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>Y</set_logfile>
-      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;populate_alc_system_mem_stats_ipran_raw_table</logfile>
-      <logext>log</logext>
+      <clear_files>Y</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
       <add_date>N</add_date>
       <add_time>N</add_time>
-      <loglevel>Error</loglevel>
+      <loglevel>Basic</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
       <set_append_logfile>N</set_append_logfile>
@@ -176,8 +89,39 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>720</xloc>
-      <yloc>336</yloc>
+      <xloc>320</xloc>
+      <yloc>96</yloc>
+      </entry>
+    <entry>
+      <name>Launch HOUR Job</name>
+      <description/>
+      <type>JOB</type>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;LaunchHourJob.kjb</filename>
+      <jobname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>Y</params_from_previous>
+      <exec_per_row>Y</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>N</create_parent_folder>
+      <pass_export>N</pass_export>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <set_append_logfile>N</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>544</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -187,13 +131,13 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>720</xloc>
-      <yloc>448</yloc>
+      <yloc>96</yloc>
       </entry>
   </entries>
   <hops>
     <hop>
       <from>START</from>
-      <to>SystemStatsXmlEndToEnd</to>
+      <to>Get All HOUR Jobs</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -201,8 +145,8 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>SystemStatsXmlEndToEnd</from>
-      <to>SystemStatsXmlUnoEndToEnd</to>
+      <from>Get All HOUR Jobs</from>
+      <to>Launch HOUR Job</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -210,25 +154,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>SystemStatsXmlUnoEndToEnd</from>
-      <to>SystemStatsXmlDosEndToEnd</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>SystemStatsXmlDosEndToEnd</from>
-      <to>Pop. ALC_SYSTEM_MEM_STATS_IPRAN_RAW Table</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Pop. ALC_SYSTEM_MEM_STATS_IPRAN_RAW Table</from>
+      <from>Launch HOUR Job</from>
       <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -238,27 +164,6 @@
     </hop>
   </hops>
   <notepads>
-    <notepad>
-      <note>Se creo en funcion de la dependencia de los archivos para popular la RAW&#x3a;&#xa;&#xa;- SystemStatsXmlEndToEnd --&#x3e; XML_SYSTEM_STATS&#xa;- SystemStatsXmlUnoEndToEnd --&#x3e; XML_SYSTEM_STATS_1&#xa;- SystemStatsXmlDosEndToEnd --&#x3e; XML_SYSTEM_STATS_2</note>
-      <xloc>160</xloc>
-      <yloc>16</yloc>
-      <width>515</width>
-      <heigth>95</heigth>
-      <fontname/>
-      <fontsize>-1</fontsize>
-      <fontbold>N</fontbold>
-      <fontitalic>N</fontitalic>
-      <fontcolorred>0</fontcolorred>
-      <fontcolorgreen>0</fontcolorgreen>
-      <fontcolorblue>0</fontcolorblue>
-      <backgroundcolorred>255</backgroundcolorred>
-      <backgroundcolorgreen>205</backgroundcolorgreen>
-      <backgroundcolorblue>112</backgroundcolorblue>
-      <bordercolorred>100</bordercolorred>
-      <bordercolorgreen>100</bordercolorgreen>
-      <bordercolorblue>100</bordercolorblue>
-      <drawshadow>Y</drawshadow>
-    </notepad>
   </notepads>
 
 </job>

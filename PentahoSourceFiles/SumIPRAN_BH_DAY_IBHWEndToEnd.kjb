@@ -11,6 +11,11 @@
   <modified_user/>
   <modified_date>2016&#x2f;12&#x2f;14 17&#x3a;02&#x3a;35.181</modified_date>
     <parameters>
+        <parameter>
+            <name>FECHA_PROC</name>
+            <default_value/>
+            <description/>
+        </parameter>
     </parameters>
     <slaveservers>
     </slaveservers>
@@ -51,8 +56,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>316</xloc>
-      <yloc>188</yloc>
+      <xloc>32</xloc>
+      <yloc>128</yloc>
       </entry>
     <entry>
       <name>SetEnvironment</name>
@@ -84,8 +89,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>508</xloc>
-      <yloc>188</yloc>
+      <xloc>224</xloc>
+      <yloc>128</yloc>
       </entry>
     <entry>
       <name>Calcular Sum. BH DAY IBHW</name>
@@ -117,8 +122,117 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>748</xloc>
-      <yloc>188</yloc>
+      <xloc>576</xloc>
+      <yloc>128</yloc>
+      </entry>
+    <entry>
+      <name>Success</name>
+      <description/>
+      <type>SUCCESS</type>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>720</xloc>
+      <yloc>384</yloc>
+      </entry>
+    <entry>
+      <name>Set REGEXP variables</name>
+      <description/>
+      <type>SET_VARIABLES</type>
+      <replacevars>Y</replacevars>
+      <filename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;ipran_config.properties</filename>
+      <file_variable_type>CURRENT_JOB</file_variable_type>
+      <fields>
+        <field>
+          <variable_name>REGEXP-CLAUSE</variable_name>
+          <variable_value>&#x24;&#x7b;REGEXP-CLAUSE-DAY-BH-IBHW&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>PROCESS_NAME</variable_name>
+          <variable_value>&#x24;&#x7b;SUM-IPRAN-DAY-BH&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>FECHA_PROC</variable_name>
+          <variable_value>&#x24;&#x7b;FECHA_PROC&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>MASK</variable_name>
+          <variable_value>&#x24;&#x7b;MASK-IPRAN-DAY-BH&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>720</xloc>
+      <yloc>176</yloc>
+      </entry>
+    <entry>
+      <name>UpProcessToRunStatus</name>
+      <description/>
+      <type>TRANS</type>
+      <specification_method>filename</specification_method>
+      <trans_object_id/>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;UpProcessToRunStatus.ktr</filename>
+      <transname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>Y</clear_rows>
+      <clear_files>Y</clear_files>
+      <set_logfile>Y</set_logfile>
+      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;up_process_to_run_status</logfile>
+      <logext>log</logext>
+      <add_date>Y</add_date>
+      <add_time>N</add_time>
+      <loglevel>Error</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>720</xloc>
+      <yloc>288</yloc>
+      </entry>
+    <entry>
+      <name>Tablas Objetos</name>
+      <description/>
+      <type>JOB</type>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;TablasObjetosEndToEnd.kjb</filename>
+      <jobname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>N</create_parent_folder>
+      <pass_export>N</pass_export>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <set_append_logfile>N</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>416</xloc>
+      <yloc>128</yloc>
       </entry>
   </entries>
   <hops>
@@ -132,7 +246,43 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
+      <from>Calcular Sum. BH DAY IBHW</from>
+      <to>Set REGEXP variables</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Set REGEXP variables</from>
+      <to>UpProcessToRunStatus</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>UpProcessToRunStatus</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
       <from>SetEnvironment</from>
+      <to>Tablas Objetos</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Tablas Objetos</from>
       <to>Calcular Sum. BH DAY IBHW</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -143,13 +293,13 @@
   </hops>
   <notepads>
     <notepad>
-      <note>SELECT  COUNT&#x28;1&#x29;&#xa;FROM  ERROR_LOG_NEW&#xa;WHERE TO_CHAR&#x28;FECHA,&#x27;DD.MM.YYYY&#x27;&#x29; &#x3d; &#x27;05.12.2016&#x27;&#xa;AND SQL_CODE &#x3d; 0&#xa;AND OBJETO IN &#x28;&#x27;&#x27;&#x29;</note>
-      <xloc>288</xloc>
-      <yloc>48</yloc>
-      <width>382</width>
-      <heigth>95</heigth>
-      <fontname/>
-      <fontsize>-1</fontsize>
+      <note>Calcula las sumarizaciones DAY, BH, IBHW &#x28;si corresponde&#x29; y tambien&#xa;los procesos que llenan las tablas OBJ ya que la info viene en forma&#xa;diaria &#x28;Fecha para la busqueda de los objetos DD.MM.YYYY&#x29;</note>
+      <xloc>96</xloc>
+      <yloc>16</yloc>
+      <width>478</width>
+      <heigth>61</heigth>
+      <fontname>Sans</fontname>
+      <fontsize>10</fontsize>
       <fontbold>N</fontbold>
       <fontitalic>N</fontitalic>
       <fontcolorred>0</fontcolorred>

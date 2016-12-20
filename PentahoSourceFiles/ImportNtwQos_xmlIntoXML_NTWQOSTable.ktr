@@ -100,12 +100,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Write to log</from><to>XML_NTWQOS</to><enabled>N</enabled> </hop>
   <hop> <from>XML_NTWQOS</from><to>XML_NTWQOS errors</to><enabled>Y</enabled> </hop>
   <hop> <from>Get rows from result</from><to>Add TABLA constant</to><enabled>Y</enabled> </hop>
   <hop> <from>Add TABLA constant</from><to>Set Variables</to><enabled>Y</enabled> </hop>
   <hop> <from>Set Variables</from><to>NtwQos_xml CSV file</to><enabled>Y</enabled> </hop>
-  <hop> <from>NtwQos_xml CSV file</from><to>Write to log</to><enabled>N</enabled> </hop>
   <hop> <from>NtwQos_xml CSV file</from><to>XML_NTWQOS</to><enabled>Y</enabled> </hop>
   </order>
   <step>
@@ -348,68 +346,6 @@
     </step>
 
   <step>
-    <name>Write to log</name>
-    <type>WriteToLog</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <loglevel>log_level_basic</loglevel>
-      <displayHeader>Y</displayHeader>
-      <limitRows>N</limitRows>
-      <limitRowsNumber>0</limitRowsNumber>
-      <logmessage>From NtwQos XML&#x3a;</logmessage>
-    <fields>
-      <field>
-        <name>IN_PROFILE_OCTETS_DROPPED</name>
-        </field>
-      <field>
-        <name>IN_PROFILE_OCTETS_FORWARDED</name>
-        </field>
-      <field>
-        <name>LAG_PORT</name>
-        </field>
-      <field>
-        <name>MONITORED_OBJECT_SITE_ID</name>
-        </field>
-      <field>
-        <name>MONITORED_OBJECT_SITE_NAME</name>
-        </field>
-      <field>
-        <name>OUT_OF_PROFILE_OCTETS_DROPPED</name>
-        </field>
-      <field>
-        <name>OUT_OF_PROFILE_OCTETS_FWDED</name>
-        </field>
-      <field>
-        <name>PORT_ID</name>
-        </field>
-      <field>
-        <name>QUEUE_ID</name>
-        </field>
-      <field>
-        <name>MEDICION</name>
-        </field>
-      <field>
-        <name>TIME_RECORDED</name>
-        </field>
-      <field>
-        <name>NOMBRE_CSV</name>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>704</xloc>
-      <yloc>16</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
     <name>XML_NTWQOS</name>
     <type>TableOutput</type>
     <description/>
@@ -489,7 +425,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>880</xloc>
+      <xloc>768</xloc>
       <yloc>80</yloc>
       <draw>Y</draw>
       </GUI>
@@ -733,7 +669,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>880</xloc>
+      <xloc>768</xloc>
       <yloc>208</yloc>
       <draw>Y</draw>
       </GUI>

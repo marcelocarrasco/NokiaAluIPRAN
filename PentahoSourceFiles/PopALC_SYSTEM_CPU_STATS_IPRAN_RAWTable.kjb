@@ -1,41 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>NtwQosXmlEndToEnd</name>
+  <name>PopALC_SYSTEM_CPU_STATS_IPRAN_RAWTable</name>
     <description/>
     <extended_description/>
     <job_version/>
     <job_status>0</job_status>
   <directory>&#x2f;</directory>
   <created_user>-</created_user>
-  <created_date>2016&#x2f;11&#x2f;16 14&#x3a;52&#x3a;03.357</created_date>
+  <created_date>2016&#x2f;12&#x2f;16 10&#x3a;29&#x3a;23.222</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2016&#x2f;11&#x2f;16 14&#x3a;52&#x3a;03.357</modified_date>
+  <modified_date>2016&#x2f;12&#x2f;16 10&#x3a;29&#x3a;23.222</modified_date>
     <parameters>
     </parameters>
-  <connection>
-    <name>db_connection</name>
-    <server>&#x24;&#x7b;DB-HOST&#x7d;</server>
-    <type>ORACLE</type>
-    <access>Native</access>
-    <database>&#x24;&#x7b;DB-NAME&#x7d;</database>
-    <port>&#x24;&#x7b;DB-PORT&#x7d;</port>
-    <username>&#x24;&#x7b;DB-USER&#x7d;</username>
-    <password>&#x24;&#x7b;DB-PASSWORD&#x7d;</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>&#x24;&#x7b;DB-PORT&#x7d;</attribute></attribute>
-      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
-      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
-      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
-    </attributes>
-  </connection>
     <slaveservers>
     </slaveservers>
 <job-log-table><connection/>
@@ -75,8 +51,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>112</xloc>
-      <yloc>128</yloc>
+      <xloc>64</xloc>
+      <yloc>112</yloc>
       </entry>
     <entry>
       <name>SetEnvironment</name>
@@ -89,8 +65,8 @@
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
+      <clear_rows>Y</clear_rows>
+      <clear_files>Y</clear_files>
       <set_logfile>N</set_logfile>
       <logfile/>
       <logext/>
@@ -108,32 +84,22 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>240</xloc>
-      <yloc>128</yloc>
+      <xloc>272</xloc>
+      <yloc>112</yloc>
       </entry>
     <entry>
-      <name>Success</name>
-      <description/>
-      <type>SUCCESS</type>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>560</xloc>
-      <yloc>448</yloc>
-      </entry>
-    <entry>
-      <name>PopulateFILESTable</name>
+      <name>Import Data To XML_SYSTEM_STATS_3 Table</name>
       <description/>
       <type>JOB</type>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;GetFilesAndPopulateFILESTable.kjb</filename>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;ImportDataToXML_SYSTEM_STATS_3Table.kjb</filename>
       <jobname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
       <set_logfile>Y</set_logfile>
-      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;populate_files_table_cardstatus_xml</logfile>
+      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;import_data_to_xml_system_stats_3_table</logfile>
       <logext>log</logext>
       <add_date>Y</add_date>
       <add_time>N</add_time>
@@ -149,135 +115,28 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>576</xloc>
-      <yloc>128</yloc>
+      <xloc>688</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
-      <name>Set FILE-NAME variable</name>
-      <description/>
-      <type>SET_VARIABLES</type>
-      <replacevars>N</replacevars>
-      <filename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;ipran_config.properties</filename>
-      <file_variable_type>CURRENT_JOB</file_variable_type>
-      <fields>
-        <field>
-          <variable_name>FILE-NAME</variable_name>
-          <variable_value>&#x24;&#x7b;NTWQOS-XML&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>FILES-LOCATION</variable_name>
-          <variable_value>&#x24;&#x7b;FILES&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>FILE-NAME-EXCLUDE</variable_name>
-          <variable_value>&#x24;&#x7b;NTWQOS-XML-EXCLUDE&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>ORACLE-REGEXP</variable_name>
-          <variable_value>&#x24;&#x7b;NTWQOS_XML_REGEXP_ORA&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>TABLA</variable_name>
-          <variable_value>XML_NTWQOS</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>ZIP-FILE</variable_name>
-          <variable_value>&#x24;&#x7b;NTWQOS_XML_ZIP&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-      </fields>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>416</xloc>
-      <yloc>128</yloc>
-      </entry>
-    <entry>
-      <name>NtwQos_xml --&#x3e; XML_NTWQOS</name>
-      <description/>
-      <type>JOB</type>
-      <specification_method>filename</specification_method>
-      <job_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;ImportDataToXML_NTWQOSTable.kjb</filename>
-      <jobname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>Y</set_logfile>
-      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;ntwqos_xml_to_xml_NTWQOS</logfile>
-      <logext>log</logext>
-      <add_date>Y</add_date>
-      <add_time>N</add_time>
-      <loglevel>Error</loglevel>
-      <slave_server_name/>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <expand_remote_job>N</expand_remote_job>
-      <create_parent_folder>N</create_parent_folder>
-      <pass_export>N</pass_export>
-      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>      <set_append_logfile>N</set_append_logfile>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>288</xloc>
-      <yloc>240</yloc>
-      </entry>
-    <entry>
-      <name>Hay Arch. NtwQosXml para procesar&#x3f;&#x3f;</name>
-      <description/>
-      <type>EVAL_TABLE_CONTENT</type>
-      <connection>db_connection</connection>
-      <schemaname/>
-      <tablename/>
-      <success_condition>rows_count_greater</success_condition>
-      <limit>0</limit>
-      <is_custom_sql>Y</is_custom_sql>
-      <is_usevars>Y</is_usevars>
-      <custom_sql>SELECT  NOMBRE_CSV&#xa;FROM FILES&#xa;WHERE REGEXP_LIKE&#x28;NOMBRE_CSV,&#x27;&#x24;&#x7b;ORACLE-REGEXP&#x7d;&#x27;&#x29; --&#xa;--AND NOT REGEXP_LIKE&#x28;nombre_csv,&#x27;&#x5e;&#x2a;&#x28;CardStatus_xml_1&#x29;&#x5c;.csv&#x24;&#x27;&#x29;&#xa;AND NOMBRE_CSV LIKE &#x27;&#x25;&#x24;&#x7b;FECHA-PROC&#x7d;&#x25;&#x27;&#xa;--AND SUBSTR&#x28;NOMBRE_CSV,-31,8&#x29; &#x3d; &#x27;&#x24;&#x7b;FECHA-PROC&#x7d;&#x27; --Formato YYYYMMDD&#xa;AND STATUS &#x3d; 5&#xa;AND PROCESADO IS NULL</custom_sql>
-      <add_rows_result>N</add_rows_result>
-      <clear_result_rows>Y</clear_result_rows>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>576</xloc>
-      <yloc>240</yloc>
-      </entry>
-    <entry>
-      <name>Job NtwQosXmlEndToEnd Aborted</name>
-      <description/>
-      <type>ABORT</type>
-      <message>&#x3d;&#x3d;&#x3e;&#x3e; No hay archivos nuevos a procesar&#x3a; &#x24;&#x7b;FECHA-PROC&#x7d; &#x3c;&#x3c;&#x3d;&#x3d;</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>832</xloc>
-      <yloc>240</yloc>
-      </entry>
-    <entry>
-      <name>Pop. ALC_L_I_SCNIOLR_RAW_INS Table</name>
+      <name>Ins. Process To Run HOUR</name>
       <description/>
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;PopulateALC_L_I_SCNIOLR_RAW_INSTable.ktr</filename>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;InsProcessToRunHOUR.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
       <clear_rows>Y</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>Y</set_logfile>
-      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;populate_alc_l_i_scniolr_raw_ins_table</logfile>
-      <logext>log</logext>
+      <clear_files>Y</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
       <add_date>N</add_date>
       <add_time>N</add_time>
-      <loglevel>Error</loglevel>
+      <loglevel>Basic</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
       <set_append_logfile>N</set_append_logfile>
@@ -289,8 +148,99 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>288</xloc>
-      <yloc>448</yloc>
+      <xloc>688</xloc>
+      <yloc>368</yloc>
+      </entry>
+    <entry>
+      <name>Success</name>
+      <description/>
+      <type>SUCCESS</type>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>864</xloc>
+      <yloc>368</yloc>
+      </entry>
+    <entry>
+      <name>SystemStatsXmlTresEndToEnd</name>
+      <description/>
+      <type>JOB</type>
+      <specification_method>filename</specification_method>
+      <job_object_id/>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;SystemStatsXmlTresEndToEnd.kjb</filename>
+      <jobname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <slave_server_name/>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <expand_remote_job>N</expand_remote_job>
+      <create_parent_folder>N</create_parent_folder>
+      <pass_export>N</pass_export>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <set_append_logfile>N</set_append_logfile>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>464</xloc>
+      <yloc>112</yloc>
+      </entry>
+    <entry>
+      <name>Set FILE-NAME variable</name>
+      <description/>
+      <type>SET_VARIABLES</type>
+      <replacevars>N</replacevars>
+      <filename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;ipran_config.properties</filename>
+      <file_variable_type>CURRENT_JOB</file_variable_type>
+      <fields>
+        <field>
+          <variable_name>FILE-NAME</variable_name>
+          <variable_value>&#x24;&#x7b;SYSTEMSTATS-XML-TRES&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>FILES-LOCATION</variable_name>
+          <variable_value>&#x24;&#x7b;FILES&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>FILE-NAME-EXCLUDE</variable_name>
+          <variable_value>&#x24;&#x7b;SYSTEMSTATS-XML-TRES-EXCLUDE&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>ORACLE-REGEXP</variable_name>
+          <variable_value>&#x24;&#x7b;SYSTEMSTATS_XML_TRES_REGEXP_ORA&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>TABLA</variable_name>
+          <variable_value>XML_SYSTEM_STATS_3</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>ZIP-FILE</variable_name>
+          <variable_value>&#x24;&#x7b;SYSTEMSTATS_XML_ZIP&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>FECHA_PROC</variable_name>
+          <variable_value>&#x24;&#x7b;FECHA-PROC&#x7d;</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>688</xloc>
+      <yloc>112</yloc>
       </entry>
   </entries>
   <hops>
@@ -304,7 +254,25 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
+      <from>Ins. Process To Run HOUR</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
       <from>SetEnvironment</from>
+      <to>SystemStatsXmlTresEndToEnd</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>SystemStatsXmlTresEndToEnd</from>
       <to>Set FILE-NAME variable</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -314,7 +282,7 @@
     </hop>
     <hop>
       <from>Set FILE-NAME variable</from>
-      <to>PopulateFILESTable</to>
+      <to>Import Data To XML_SYSTEM_STATS_3 Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -322,44 +290,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>PopulateFILESTable</from>
-      <to>Hay Arch. NtwQosXml para procesar&#x3f;&#x3f;</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Hay Arch. NtwQosXml para procesar&#x3f;&#x3f;</from>
-      <to>Job NtwQosXmlEndToEnd Aborted</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Hay Arch. NtwQosXml para procesar&#x3f;&#x3f;</from>
-      <to>NtwQos_xml --&#x3e; XML_NTWQOS</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Pop. ALC_L_I_SCNIOLR_RAW_INS Table</from>
-      <to>Success</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>NtwQos_xml --&#x3e; XML_NTWQOS</from>
-      <to>Pop. ALC_L_I_SCNIOLR_RAW_INS Table</to>
+      <from>Import Data To XML_SYSTEM_STATS_3 Table</from>
+      <to>Ins. Process To Run HOUR</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -369,13 +301,13 @@
   </hops>
   <notepads>
     <notepad>
-      <note>Despues de PopulateFILESTable, verificar si hay archivos para procesar, sino,&#xa;finalizar proceso con mensaje de &#x22;No existen Archivos&#x22;</note>
-      <xloc>64</xloc>
+      <note>No actualiza la tabla PROCESS_TO_RUN, por que el llenado de las RAW se hace&#xa;en el mismo peridodo que se generan los archivos.</note>
+      <xloc>48</xloc>
       <yloc>32</yloc>
-      <width>529</width>
+      <width>538</width>
       <heigth>44</heigth>
-      <fontname>Sans</fontname>
-      <fontsize>10</fontsize>
+      <fontname/>
+      <fontsize>-1</fontsize>
       <fontbold>N</fontbold>
       <fontitalic>N</fontitalic>
       <fontcolorred>0</fontcolorred>

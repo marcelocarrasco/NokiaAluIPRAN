@@ -100,10 +100,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get AYER Variable</from><to>Call G_ALC_IPRAN.ALC_CARDSLOT_IPRAN_OBJ_INS Procedure</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get P_FECHA Variable</from><to>Call G_ALC_IPRAN.INS_ALC_CARDSLOT_IPRAN_OBJ Procedure</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Call G_ALC_IPRAN.ALC_CARDSLOT_IPRAN_OBJ_INS Procedure</name>
+    <name>Call G_ALC_IPRAN.INS_ALC_CARDSLOT_IPRAN_OBJ Procedure</name>
     <type>DBProc</type>
     <description/>
     <distribute>Y</distribute>
@@ -114,10 +114,10 @@
            <schema_name/>
            </partitioning>
     <connection>db_connection</connection>
-    <procedure>G_ALC_IPRAN.ALC_CARDSLOT_IPRAN_OBJ_INS</procedure>
+    <procedure>G_ALC_IPRAN.INS_ALC_CARDSLOT_IPRAN_OBJ</procedure>
     <lookup>
       <arg>
-        <name>AYER</name>
+        <name>P_FECHA</name>
         <direction>IN</direction>
         <type>String</type>
       </arg>
@@ -136,7 +136,7 @@
     </step>
 
   <step>
-    <name>Get AYER Variable</name>
+    <name>Get P_FECHA Variable</name>
     <type>GetVariable</type>
     <description/>
     <distribute>Y</distribute>
@@ -148,7 +148,7 @@
            </partitioning>
     <fields>
       <field>
-        <name>AYER</name>
+        <name>P_FECHA</name>
         <variable>&#x24;&#x7b;FECHA_PROC&#x7d;</variable>
         <type>String</type>
         <format/>

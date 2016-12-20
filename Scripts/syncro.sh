@@ -10,6 +10,8 @@ RUTA=$1
 
 LISTA_OUTPUT=$1/Scripts/listaArc$(date +'%Y%m%d_%H%m%s').lst
 
+FECHA_PROC=$(date +'%Y%m%d%H') #FECHA HORA (YYYYMMDDHH24) que se quiere procesar (ej. 2016120109
+
 > $LISTA_OUTPUT
 echo "Copiando archivos origen --> destino"
 
@@ -51,7 +53,8 @@ if [[ -s $LISTA_OUTPUT ]] ; then
   for file in $(ls $1/xml_output/*SystemStats_xml_2.csv) ; do mv $file ${file//_xml_2/_2_xml} ; done
   for file in $(ls $1/xml_output/*SystemStats_xml_3.csv) ; do mv $file ${file//_xml_3/_3_xml} ; done
   for file in $(ls $1/xml_output/*NtwQos_xml_1.csv) ; do mv $file ${file//_xml_1/_1_xml} ; done
-
+  # Popular tablas XML_* y RAW Tables
+  sh $1/Scripts/ipranSyncroXML.sh $FECHA_PROC
 else
   echo "No hay archivos a procesar..."
   rm $LISTA_OUTPUT

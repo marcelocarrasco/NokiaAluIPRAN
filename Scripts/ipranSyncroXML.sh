@@ -16,7 +16,8 @@ echo "------------------------------------------------"
 echo "Procesando archivos de la hora == >> $FECHA_PROC"
 echo "------------------------------------------------"
 #
-sh /home/oracle/Pentaho61/data-integration/kitchen.sh -file=/home/oracle/NokiaAluIPRAN/PentahoSourceFiles/RunAllJobs.kjb -param:FECHA-PROC=$FECHA_PROC > /home/oracle/NokiaAluIPRAN/testIpranSyncroXML.log
+sh /calidad/Pentaho61/data-integration/kitchen.sh -file=/calidad/NokiaAluIPRAN/PentahoSourceFiles/RunAllJobs.kjb -param:FECHA-PROC=$FECHA_PROC > /calidad/NokiaAluIPRAN/PentahoLogs/testIpranSyncroXML_$FECHA_PROC.log
+# sh /calidad/Pentaho61/data-integration/kitchen.sh -file=/calidad/NokiaAluIPRAN/PentahoSourceFiles/PopALC_SYSTEM_CPU_STATS_IPRAN_RAWTable.kjb -param:FECHA-PROC=$FECHA_PROC > /calidad/NokiaAluIPRAN/testIpranSyncroXML.log
 # Lipiando el log
-sh /home/oracle/NokiaAluIPRAN/Scripts/cleanupLog.sh '/home/oracle/NokiaAluIPRAN/testIpranSyncroXML.log'
+sh /calidad/NokiaAluIPRAN/Scripts/cleanupLog.sh '/calidad/NokiaAluIPRAN/testIpranSyncroXML.log'
 exit

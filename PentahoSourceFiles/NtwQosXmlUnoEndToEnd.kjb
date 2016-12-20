@@ -255,34 +255,6 @@
       <yloc>224</yloc>
       </entry>
     <entry>
-      <name>Zip NtwQosXmlUno files</name>
-      <description/>
-      <type>ZIP_FILE</type>
-      <zipfilename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output&#x2f;CSV&#x2f;NtwQosXmlUno.zip</zipfilename>
-      <compressionrate>2</compressionrate>
-      <ifzipfileexists>1</ifzipfileexists>
-      <wildcard>&#x24;&#x7b;NTWQOS-XML-UNO&#x7d;</wildcard>
-      <wildcardexclude/>
-      <sourcedirectory>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output</sourcedirectory>
-      <movetodirectory/>
-      <afterzip>1</afterzip>
-      <addfiletoresult>N</addfiletoresult>
-      <isfromprevious>N</isfromprevious>
-      <createparentfolder>N</createparentfolder>
-      <adddate>N</adddate>
-      <addtime>N</addtime>
-      <SpecifyFormat>Y</SpecifyFormat>
-      <date_time_format>yyyyMMddHHmmss</date_time_format>
-      <createMoveToDirectory>N</createMoveToDirectory>
-      <include_subfolders>Y</include_subfolders>
-      <stored_source_path_depth>1</stored_source_path_depth>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>144</xloc>
-      <yloc>320</yloc>
-      </entry>
-    <entry>
       <name>Populate ALC_LAGS_IPRAN_SCNEOLR_RAW Table</name>
       <description/>
       <type>TRANS</type>
@@ -368,24 +340,6 @@
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</from>
-      <to>Zip NtwQosXmlUno files</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Zip NtwQosXmlUno files</from>
-      <to>Populate ALC_LAGS_IPRAN_SCNEOLR_RAW Table</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>

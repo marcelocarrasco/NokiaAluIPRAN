@@ -33,15 +33,37 @@ truncate table ALC_STATS_IPRAN_BH;
 truncate table ALC_STATS_IPRAN_DAY;                                             
 truncate table ALC_STATS_IPRAN_IBHW;                                            
 truncate table ALC_CARDSLOT_IPRAN_OBJ;                                          
-truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;                                      
-truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;                                      
-truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;                                  
-truncate table ALC_PHYSICALPORT_IPRAN_OBJ;                                      
+truncate table ALC_PHYSICALPORT_IPRAN_OBJ;
+--------------------------------------------------------------------------------
+--truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
+--truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
+--truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
+--truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
+--truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
+--------------------------------------------------------------------------------
 truncate table ALC_STATS_CPUMEM_HOUR;                                           
-truncate table ALC_STATS_IPRAN_HOUR;                                            
-truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
-truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW; 
+truncate table ALC_STATS_IPRAN_HOUR; 
+--------------------------------------------------------------------------------
+truncate table files;
+--------------------------------------------------------------------------------
+create public synonym ALC_LAGS_IPRAN_SCNEOLR_RAW for mcarrasco.ALC_LAGS_IPRAN_SCNEOLR_RAW;
+create public synonym ALC_LAGS_IPRAN_SCNIOLR_RAW for mcarrasco.ALC_LAGS_IPRAN_SCNIOLR_RAW;
+create public synonym ALC_MEDIA_INDP_STATS_IPRAN_RAW for mcarrasco.ALC_MEDIA_INDP_STATS_IPRAN_RAW;
+create public synonym ALC_SYSTEM_CPU_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                             
+create public synonym ALC_SYSTEM_MEM_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
 
+grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to mstuyck;
+grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to mstuyck;
+grant select on ALC_MEDIA_INDP_STATS_IPRAN_RAW to mstuyck;
+grant select on ALC_SYSTEM_CPU_STATS_IPRAN_RAW to mstuyck;                       
+grant select on ALC_SYSTEM_MEM_STATS_IPRAN_RAW to mstuyck;
+
+grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to frinaldi;
+grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to frinaldi;
+grant select on ALC_MEDIA_INDP_STATS_IPRAN_RAW to frinaldi;
+grant select on ALC_SYSTEM_CPU_STATS_IPRAN_RAW to frinaldi;                       
+grant select on ALC_SYSTEM_MEM_STATS_IPRAN_RAW to frinaldi;
+--------------------------------------------------------------------------------
 
 select 'truncate table '||table_name||';'
 from user_tables
@@ -88,7 +110,17 @@ select  substr('2016120109',7,2)||'.'||
         ' '||
         substr('2016120109',9,2)
 from dual;
-
+--
+SELECT  '${SUM-IPRAN-HOUR}'           																			                                            AS  PROCESS_NAME,
+        '${PARAM-SUM-IPRAN-HOUR}'||TO_CHAR(TO_DATE(substr('${FECHA_PROC}',7,2)||'.'||
+                                                  substr('${FECHA_PROC}',5,2)||'.'||
+                                                  substr('${FECHA_PROC}',1,4)||' '||
+                                                  substr('${FECHA_PROC}',9,2),'DD.MM.YYYY HH24')+1,'DD.MM.YYYY HH24')		AS  PARAMS,
+        TO_CHAR(TO_DATE(SUBSTR('${FECHA_PROC}',1,10),'DD.MM.YYYY')+1,'DD.MM.YYYY')								                      AS	FECHA_TO_RUN,
+        'Daily'                         																			                                          AS  TIPO,
+        '${GRUPO}'                      																			                                          AS  GRUPO,
+        5                               																			                                          AS  STATUS
+FROM  DUAL
 --
 -- drop table process_to_run purge;
 create table process_to_run(
@@ -104,4 +136,30 @@ alter table process_to_run add constraint chk_process_to_run check (tipo in ('Ho
 
 comment on table process_to_run is 'Contiene todos los procesos PENTAHO (.kjb) que se ejecutaran, funciona como una cola';
 comment on column process_to_run.fecha_to_run is 'Representa la fecha-hora que se pasara como parametro al Job';
+alter table process_to_run add (JOB_NAME  varchar2(500 char) generated always as (substr(PROCESS_NAME,instr(PROCESS_NAME,'/',-1)+1,length(PROCESS_NAME))) virtual);
+--
+-- UPDATE DE PROCESS_TO_RUN
+--
+MERGE INTO  PROCESS_TO_RUN PTR
+USING (SELECT COUNT(1)          AS TOTAL_ROWS,
+              '${PROCESS_NAME}' AS PROCESS_NAME,
+              '${FECHA_PROC}'   AS FECHA_TO_RUN
+      FROM  ERROR_LOG_NEW
+      WHERE TO_CHAR(FECHA,'DD.MM.YYYY') = '${FECHA_PROC}'
+      AND SQL_CODE != 0
+      AND regexp_like(OBJETO,${REGEXP-CLAUSE})) DATOS
+ON  (PTR.FECHA_TO_RUN = DATOS.FECHA_TO_RUN AND PTR.PROCESS_NAME = DATOS.PROCESS_NAME)
+WHEN MATCHED THEN
+  UPDATE SET  PROCESADO = SYSDATE,
+              STATUS = DATOS.STATUS
+  WHERE PTR.PROCESS_NAME = DATOS.PROCESS_NAME
+  AND   PTR.FECHA_TO_RUN = DATOS.FECHA_TO_RUN;
+-------------------------------------------------------------------------  
 
+SELECT  TRIM(PROCESS_NAME)  PROCESS_NAME
+        ,TRIM(FECHA_TO_RUN) FECHA_TO_RUN
+FROM PROCESS_TO_RUN 
+WHERE STATUS != 0
+AND   PROCESADO IS NULL
+AND   FEHCA_TO_RUN = '20.12.2016 13' --${FECHA-PROC} -- DD.MM.YYYY HH24
+;

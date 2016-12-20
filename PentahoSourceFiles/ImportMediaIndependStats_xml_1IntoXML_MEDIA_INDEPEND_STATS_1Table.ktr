@@ -100,12 +100,13 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Write to log</from><to>XML_MEDIA_INDEPEND_STATS_1</to><enabled>Y</enabled> </hop>
+  <hop> <from>Write to log</from><to>XML_MEDIA_INDEPEND_STATS_1</to><enabled>N</enabled> </hop>
   <hop> <from>XML_MEDIA_INDEPEND_STATS_1</from><to>XML_MEDIA_INDEPEND_STATS_1 errors</to><enabled>Y</enabled> </hop>
   <hop> <from>Get rows from result</from><to>Add TABLA constant</to><enabled>Y</enabled> </hop>
   <hop> <from>Add TABLA constant</from><to>Set Variables</to><enabled>Y</enabled> </hop>
   <hop> <from>Set Variables</from><to>mediaIndependStats_xml_1 CSV file</to><enabled>Y</enabled> </hop>
-  <hop> <from>mediaIndependStats_xml_1 CSV file</from><to>Write to log</to><enabled>Y</enabled> </hop>
+  <hop> <from>mediaIndependStats_xml_1 CSV file</from><to>Write to log</to><enabled>N</enabled> </hop>
+  <hop> <from>mediaIndependStats_xml_1 CSV file</from><to>XML_MEDIA_INDEPEND_STATS_1</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Add TABLA constant</name>

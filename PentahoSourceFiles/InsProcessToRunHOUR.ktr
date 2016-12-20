@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>GetAllEndToEndJobs</name>
+    <name>InsProcessToRunHOUR</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -66,41 +66,45 @@
     <clusterschemas>
     </clusterschemas>
   <created_user>-</created_user>
-  <created_date>2016&#x2f;07&#x2f;26 15&#x3a;24&#x3a;49.516</created_date>
+  <created_date>2016&#x2f;12&#x2f;16 10&#x3a;41&#x3a;15.896</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2016&#x2f;07&#x2f;26 15&#x3a;24&#x3a;49.516</modified_date>
+  <modified_date>2016&#x2f;12&#x2f;16 10&#x3a;41&#x3a;15.896</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
-    <notepad>
-      <note>.&#x2a;&#x28;&#x3f;i&#x29;&#x28;SystemStatsXmlEndToEnd&#x7c;SystemStatsXmlUnoEndToEnd&#x7c;SystemStatsXmlDosEndToEnd&#x29;.&#x2a;&#x28;&#x3f;-i&#x29;&#x5c;.kjb</note>
-      <xloc>292</xloc>
-      <yloc>313</yloc>
-      <width>709</width>
-      <heigth>27</heigth>
-      <fontname>Sans</fontname>
-      <fontsize>10</fontsize>
-      <fontbold>N</fontbold>
-      <fontitalic>N</fontitalic>
-      <fontcolorred>0</fontcolorred>
-      <fontcolorgreen>0</fontcolorgreen>
-      <fontcolorblue>0</fontcolorblue>
-      <backgroundcolorred>255</backgroundcolorred>
-      <backgroundcolorgreen>205</backgroundcolorgreen>
-      <backgroundcolorblue>112</backgroundcolorblue>
-      <bordercolorred>100</bordercolorred>
-      <bordercolorgreen>100</bordercolorgreen>
-      <bordercolorblue>100</bordercolorblue>
-      <drawshadow>Y</drawshadow>
-    </notepad>
   </notepads>
+  <connection>
+    <name>db_connection</name>
+    <server>&#x24;&#x7b;DB-HOST&#x7d;</server>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>&#x24;&#x7b;DB-NAME&#x7d;</database>
+    <port>&#x24;&#x7b;DB-PORT&#x7d;</port>
+    <username>&#x24;&#x7b;DB-USER&#x7d;</username>
+    <password>&#x24;&#x7b;DB-PASSWORD&#x7d;</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>&#x24;&#x7b;DB-PORT&#x7d;</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
   <order>
-  <hop> <from>Get Job File Names</from><to>Copy rows to result</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>Write InsProcessToRunHOUR log</to><enabled>Y</enabled> </hop>
+  <hop> <from>Write InsProcessToRunHOUR log</from><to>Ins. PROCESS_TO_RUN HOUR</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Copy rows to result</name>
-    <type>RowsToResult</type>
+    <name>Get Variables</name>
+    <type>GetVariable</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -109,17 +113,55 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
+    <fields>
+      <field>
+        <name>SUM-IPRAN-HOUR</name>
+        <variable>&#x24;&#x7b;SUM-IPRAN-HOUR&#x7d;</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>PARAM-SUM-IPRAN-HOUR</name>
+        <variable>&#x24;&#x7b;PARAM-SUM-IPRAN-HOUR&#x7d;</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>GRUPO</name>
+        <variable>&#x24;&#x7b;GRUPO&#x7d;</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>432</xloc>
-      <yloc>80</yloc>
+      <xloc>208</xloc>
+      <yloc>128</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Get Job File Names</name>
-    <type>GetFileNames</type>
+    <name>Ins. PROCESS_TO_RUN HOUR</name>
+    <type>ExecSQL</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -128,50 +170,61 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <filter>
-      <filterfiletype>only_files</filterfiletype>
-    </filter>
-    <doNotFailIfNoFile>N</doNotFailIfNoFile>
-    <rownum>N</rownum>
-    <isaddresult>Y</isaddresult>
-    <filefield>N</filefield>
-    <rownum_field/>
-    <filename_Field/>
-    <wildcard_Field/>
-    <exclude_wildcard_Field/>
-    <dynamic_include_subfolders>N</dynamic_include_subfolders>
-    <limit>0</limit>
-    <file>
-      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;PopALC_LAGS_IPRAN_SCNEOLR_RAWTable.kjb</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;PopALC_LAGS_IPRAN_SCNIOLR_RAWTable.kjb</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;PopALC_MEDIA_INDP_STATS_IPRAN_RAWTable.kjb</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;PopALC_SYSTEM_MEM_STATS_IPRAN_RAWTable.kjb</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;PopALC_SYSTEM_CPU_STATS_IPRAN_RAWTable.kjb</name>
-      <filemask/>
-      <exclude_filemask/>
-      <file_required>N</file_required>
-      <include_subfolders>N</include_subfolders>
-    </file>
+    <connection>db_connection</connection>
+    <execute_each_row>Y</execute_each_row>
+    <single_statement>Y</single_statement>
+    <replace_variables>Y</replace_variables>
+    <quoteString>N</quoteString>
+    <sql>MERGE INTO PROCESS_TO_RUN PRO&#xa;USING &#x28;SELECT	&#x27;&#x24;&#x7b;SUM-IPRAN-HOUR&#x7d;&#x27;           																			        AS  PROCESS_NAME,&#xa;				&#x27;&#x24;&#x7b;PARAM-SUM-IPRAN-HOUR&#x7d;&#x27;&#x7c;&#x7c;TO_CHAR&#x28;TO_DATE&#x28;substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,7,2&#x29;&#x7c;&#x7c;&#x27;.&#x27;&#x7c;&#x7c;&#xa;                		                                  substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,5,2&#x29;&#x7c;&#x7c;&#x27;.&#x27;&#x7c;&#x7c;&#xa;                        		                          substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,1,4&#x29;&#x7c;&#x7c;&#x27; &#x27;&#x7c;&#x7c;&#xa;                                		                  substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,9,2&#x29;,&#x27;DD.MM.YYYY HH24&#x27;&#x29;,&#x27;DD.MM.YYYY HH24&#x27;&#x29;	AS  PARAMS,&#xa;        		TO_CHAR&#x28;TO_DATE&#x28;substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,7,2&#x29;&#x7c;&#x7c;&#x27;.&#x27;&#x7c;&#x7c;&#xa;                		                                  substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,5,2&#x29;&#x7c;&#x7c;&#x27;.&#x27;&#x7c;&#x7c;&#xa;                        		                          substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,1,4&#x29;&#x7c;&#x7c;&#x27; &#x27;&#x7c;&#x7c;&#xa;                                		                  substr&#x28;&#x27;&#x24;&#x7b;FECHA_PROC&#x7d;&#x27;,9,2&#x29;,&#x27;DD.MM.YYYY HH24&#x27;&#x29;,&#x27;DD.MM.YYYY HH24&#x27;&#x29;   AS	FECHA_TO_RUN,&#xa;        		&#x27;Hourly&#x27;                         																			    AS  TIPO,&#xa;        		&#x27;&#x24;&#x7b;GRUPO&#x7d;&#x27;                      																			    AS  GRUPO,&#xa;        		5                          																			            AS  STATUS&#xa;		FROM  DUAL&#x29; DATOS&#xa;ON  &#x28;PRO.PROCESS_NAME &#x3d; DATOS.PROCESS_NAME AND PRO.FECHA_TO_RUN &#x3d; DATOS.FECHA_TO_RUN&#xa;     AND PRO.STATUS &#x3d; DATOS.STATUS AND PRO.GRUPO &#x3d; DATOS.GRUPO AND PRO.PROCESADO IS NULL&#x29;      &#xa;WHEN NOT MATCHED THEN&#xa;  INSERT &#x28;PROCESS_NAME,PARAMS,FECHA_TO_RUN,TIPO,GRUPO,STATUS&#x29;&#xa;  VALUES &#x28;DATOS.PROCESS_NAME,DATOS.PARAMS,DATOS.FECHA_TO_RUN,DATOS.TIPO,DATOS.GRUPO,DATOS.STATUS&#x29;</sql>
+    <set_params>N</set_params>
+    <insert_field/>
+    <update_field/>
+    <delete_field/>
+    <read_field/>
+    <arguments>
+       <argument><name>SUM-IPRAN-HOUR</name></argument>
+       <argument><name>PARAM-SUM-IPRAN-HOUR</name></argument>
+       <argument><name>GRUPO</name></argument>
+    </arguments>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>176</xloc>
-      <yloc>80</yloc>
+      <xloc>656</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Write InsProcessToRunHOUR log</name>
+    <type>WriteToLog</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <loglevel>log_level_basic</loglevel>
+      <displayHeader>Y</displayHeader>
+      <limitRows>N</limitRows>
+      <limitRowsNumber>0</limitRowsNumber>
+      <logmessage>From GET VARIABLES&#x3a;</logmessage>
+    <fields>
+      <field>
+        <name>SUM-IPRAN-HOUR</name>
+        </field>
+      <field>
+        <name>PARAM-SUM-IPRAN-HOUR</name>
+        </field>
+      <field>
+        <name>GRUPO</name>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>384</xloc>
+      <yloc>128</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

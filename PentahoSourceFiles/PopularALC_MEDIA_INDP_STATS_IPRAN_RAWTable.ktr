@@ -100,12 +100,10 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Get FECHA-PROC Variable</from><to>Call G_ALC_IPRAN.ALC_M_I_S_IPRAN_RAW_INS Procedure</to><enabled>N</enabled> </hop>
-  <hop> <from>Get FECHA-PROC Variable</from><to>Write to log Popular Raw</to><enabled>Y</enabled> </hop>
-  <hop> <from>Write to log Popular Raw</from><to>Call G_ALC_IPRAN.ALC_M_I_S_IPRAN_RAW_INS Procedure</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get FECHA-PROC Variable</from><to>Call G_ALC_IPRAN.INS_ALC_M_I_S_IPRAN_RAW Procedure</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Call G_ALC_IPRAN.ALC_M_I_S_IPRAN_RAW_INS Procedure</name>
+    <name>Call G_ALC_IPRAN.INS_ALC_M_I_S_IPRAN_RAW Procedure</name>
     <type>DBProc</type>
     <description/>
     <distribute>Y</distribute>
@@ -116,7 +114,7 @@
            <schema_name/>
            </partitioning>
     <connection>db_connection</connection>
-    <procedure>G_ALC_IPRAN.ALC_M_I_S_IPRAN_RAW_INS</procedure>
+    <procedure>G_ALC_IPRAN.INS_ALC_M_I_S_IPRAN_RAW</procedure>
     <lookup>
       <arg>
         <name>FECHA-PROC</name>
@@ -166,35 +164,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>208</xloc>
       <yloc>112</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Write to log Popular Raw</name>
-    <type>WriteToLog</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <loglevel>log_level_basic</loglevel>
-      <displayHeader>Y</displayHeader>
-      <limitRows>N</limitRows>
-      <limitRowsNumber>0</limitRowsNumber>
-      <logmessage>FECHA-PROC&#x3a; &#x24;&#x7b;FECHA-PROC&#x7d;</logmessage>
-    <fields>
-      <field>
-        <name>FECHA-PROC</name>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>64</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>ImportCardStatus_xmlIntoXML_MEDIA_INDEPEND_STATSTable</name>
+    <name>ImportMediaStatus_xmlIntoXML_MEDIA_INDEPEND_STATSTable</name>
     <description/>
     <extended_description/>
     <trans_version/>
