@@ -149,7 +149,7 @@
     <fields>
       <field>
         <name>P_FECHA</name>
-        <variable>&#x24;&#x7b;FECHA_PROC&#x7d;</variable>
+        <variable>&#x24;&#x7b;FECHA-PROC&#x7d;</variable>
         <type>String</type>
         <format/>
         <currency/>

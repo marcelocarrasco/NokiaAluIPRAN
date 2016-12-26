@@ -1,19 +1,17 @@
 
-set verify off
-define fecha='01.12.2016'
-delete from ALC_MEDIA_INDP_STATS_IPRAN_RAW where to_char(fecha,'DD.MM.YYYY') = '&fecha';
-
-delete from XML_MEDIA_INDEPEND_STATS where substr(fecha,1,10) = '&fecha';
-delete from XML_MEDIA_INDEPEND_STATS_1 where substr(fecha,1,10) = '&fecha';
-delete from XML_SYSTEM_STATS where substr(fecha,1,10) = '&fecha';
-delete from XML_SYSTEM_STATS_1 where substr(fecha,1,10) = '&fecha';
-delete from XML_SYSTEM_STATS_2 where substr(fecha,1,10) = '&fecha';
-delete from XML_SYSTEM_STATS_3 where substr(fecha,1,10) = '&fecha';
-delete from XML_NTWQOS where substr(fecha,1,10) = '&fecha';
-delete from XML_NTWQOS_1 where substr(fecha,1,10) = '&fecha';
-delete from XML_CARD_STATUS where substr(fecha,1,10) = '&fecha';
-
-
+--set verify off
+--define fecha='01.12.2016'
+--delete from ALC_MEDIA_INDP_STATS_IPRAN_RAW where to_char(fecha,'DD.MM.YYYY') = '&fecha';
+--
+--delete from XML_MEDIA_INDEPEND_STATS where substr(fecha,1,10) = '&fecha';
+--delete from XML_MEDIA_INDEPEND_STATS_1 where substr(fecha,1,10) = '&fecha';
+--delete from XML_SYSTEM_STATS where substr(fecha,1,10) = '&fecha';
+--delete from XML_SYSTEM_STATS_1 where substr(fecha,1,10) = '&fecha';
+--delete from XML_SYSTEM_STATS_2 where substr(fecha,1,10) = '&fecha';
+--delete from XML_SYSTEM_STATS_3 where substr(fecha,1,10) = '&fecha';
+--delete from XML_NTWQOS where substr(fecha,1,10) = '&fecha';
+--delete from XML_NTWQOS_1 where substr(fecha,1,10) = '&fecha';
+--delete from XML_CARD_STATUS where substr(fecha,1,10) = '&fecha';
 
 truncate table XML_MEDIA_INDEPEND_STATS;
 truncate table XML_MEDIA_INDEPEND_STATS_1;
@@ -35,11 +33,11 @@ truncate table ALC_STATS_IPRAN_IBHW;
 truncate table ALC_CARDSLOT_IPRAN_OBJ;                                          
 truncate table ALC_PHYSICALPORT_IPRAN_OBJ;
 --------------------------------------------------------------------------------
---truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
---truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
---truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
---truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
---truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
+truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
+truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
+truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
+truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
+truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
 --------------------------------------------------------------------------------
 truncate table ALC_STATS_CPUMEM_HOUR;                                           
 truncate table ALC_STATS_IPRAN_HOUR; 
@@ -52,31 +50,74 @@ create public synonym ALC_MEDIA_INDP_STATS_IPRAN_RAW for mcarrasco.ALC_MEDIA_IND
 create public synonym ALC_SYSTEM_CPU_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                             
 create public synonym ALC_SYSTEM_MEM_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
 
+create public synonym ALC_STATS_CPUMEM_HOUR for MCARRASCO.ALC_STATS_CPUMEM_HOUR;
+create public synonym ALC_STATS_IPRAN_HOUR for MCARRASCO.ALC_STATS_IPRAN_HOUR;  
+
+create public synonym ALC_STATS_CPUMEM_DAY for MCARRASCO.ALC_STATS_CPUMEM_DAY;  
+create public synonym ALC_STATS_IPRAN_DAY for MCARRASCO.ALC_STATS_IPRAN_DAY; 
+
+create public synonym ALC_STATS_CPUMEM_BH for MCARRASCO.ALC_STATS_CPUMEM_BH;    
+create public synonym ALC_STATS_IPRAN_BH for MCARRASCO.ALC_STATS_IPRAN_BH; 
+
+create public synonym ALC_STATS_IPRAN_IBHW for MCARRASCO.ALC_STATS_IPRAN_IBHW;  
+create public synonym ALC_STATS_CPUMEM_IBHW for MCARRASCO.ALC_STATS_CPUMEM_IBHW;
+
+create public synonym ALC_CARDSLOT_IPRAN_OBJ for MCARRASCO.ALC_CARDSLOT_IPRAN_OBJ;
+create public synonym ALC_PHYSICALPORT_IPRAN_OBJ for MCARRASCO.ALC_PHYSICALPORT_IPRAN_OBJ;
+--------------------------------------------------------------------------------
 grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to mstuyck;
 grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to mstuyck;
 grant select on ALC_MEDIA_INDP_STATS_IPRAN_RAW to mstuyck;
 grant select on ALC_SYSTEM_CPU_STATS_IPRAN_RAW to mstuyck;                       
 grant select on ALC_SYSTEM_MEM_STATS_IPRAN_RAW to mstuyck;
+grant select on ALC_STATS_IPRAN_IBHW to mstuyck;                                
+grant select on ALC_STATS_CPUMEM_IBHW to mstuyck; 
+grant select on ALC_STATS_CPUMEM_BH to mstuyck;                                 
+grant select on ALC_STATS_IPRAN_BH to mstuyck;                                  
+grant select on ALC_STATS_CPUMEM_DAY to mstuyck;                                
+grant select on ALC_STATS_IPRAN_DAY to mstuyck;
+grant select on ALC_STATS_CPUMEM_HOUR to mstuyck;                               
+grant select on ALC_STATS_IPRAN_HOUR to mstuyck;  
+grant select on ALC_CARDSLOT_IPRAN_OBJ to mstuyck;                               
+grant select on ALC_PHYSICALPORT_IPRAN_OBJ to mstuyck;
 
 grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to frinaldi;
 grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to frinaldi;
 grant select on ALC_MEDIA_INDP_STATS_IPRAN_RAW to frinaldi;
 grant select on ALC_SYSTEM_CPU_STATS_IPRAN_RAW to frinaldi;                       
 grant select on ALC_SYSTEM_MEM_STATS_IPRAN_RAW to frinaldi;
+grant select on ALC_STATS_IPRAN_IBHW to frinaldi;                                
+grant select on ALC_STATS_CPUMEM_IBHW to frinaldi; 
+grant select on ALC_STATS_CPUMEM_BH to frinaldi;                                 
+grant select on ALC_STATS_IPRAN_BH to frinaldi;                                  
+grant select on ALC_STATS_CPUMEM_DAY to frinaldi;                                
+grant select on ALC_STATS_IPRAN_DAY to frinaldi;
+grant select on ALC_STATS_CPUMEM_HOUR to frinaldi;                               
+grant select on ALC_STATS_IPRAN_HOUR to frinaldi;  
+grant select on ALC_CARDSLOT_IPRAN_OBJ to frinaldi;                               
+grant select on ALC_PHYSICALPORT_IPRAN_OBJ to frinaldi;
 --------------------------------------------------------------------------------
 
 select 'truncate table '||table_name||';'
 from user_tables
 where table_name like 'ALC_%';
 
+--------------------------------------------------------------------------------
+
+select 'create public synonym '||table_name||' for MCARRASCO.'||table_name||';'
+from user_tables
+where table_name like 'ALC_%_OBJ';
+
+--------------------------------------------------------------------------------
+select 'grant select on '||table_name||' to mstuyck;'
+from user_tables
+where table_name like 'ALC_%_HOUR';
+
+--------------------------------------------------------------------------------
 SELECT  NOMBRE_CSV
 FROM (select '201611241622_mediaIndependStats_xml_1.csv' NOMBRE_CSV from dual)
 WHERE REGEXP_LIKE(NOMBRE_CSV,'^2016112416(*mediaIndependStats_xml)\.csv$') --
---AND NOT REGEXP_LIKE(nombre_csv,'^*(CardStatus_xml_1)\.csv$')
 AND NOMBRE_CSV LIKE '%2016112416%'
---AND SUBSTR(NOMBRE_CSV,-31,8) = '${FECHA-PROC}' --Formato YYYYMMDDHH24
---AND STATUS = 5
---AND PROCESADO IS NULL
 
 
 insert into CALIDAD_PARAMETROS_TABLAS(NOMBRE_TABLA,NOMBRE_TABLESPACE,PARTICION_ESQUEMA,PARTICION_ESQUEMA_MSC_FECHA,

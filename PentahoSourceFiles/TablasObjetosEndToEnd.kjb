@@ -11,11 +11,6 @@
   <modified_user>-</modified_user>
   <modified_date>2016&#x2f;12&#x2f;07 11&#x3a;35&#x3a;27.124</modified_date>
     <parameters>
-        <parameter>
-            <name>FECHA_PROC</name>
-            <default_value/>
-            <description>Fecha para la busqueda de los objetos YYYYMMDD</description>
-        </parameter>
     </parameters>
     <slaveservers>
     </slaveservers>

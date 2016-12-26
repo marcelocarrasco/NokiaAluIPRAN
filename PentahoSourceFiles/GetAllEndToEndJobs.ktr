@@ -167,6 +167,16 @@
       <exclude_filemask/>
       <file_required>N</file_required>
       <include_subfolders>N</include_subfolders>
+      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;CardStatusXmlEndToEnd.kjb</name>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;MediaIndependStatsXmlEndToEnd.kjb</name>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
     </file>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>

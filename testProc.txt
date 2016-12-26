@@ -1,0 +1,1 @@
+sh /home/oracle/Pentaho61/data-integration/kitchen.sh -file=/home/oracle/NokiaAluIPRAN/PentahoSourceFiles/SumIPRAN_HourEndToEnd.kjb -param:FEHCA-PROC=19.12.2016 12
