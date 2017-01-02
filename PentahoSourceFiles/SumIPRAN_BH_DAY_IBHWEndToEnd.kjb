@@ -231,8 +231,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>432</xloc>
-      <yloc>224</yloc>
+      <xloc>400</xloc>
+      <yloc>128</yloc>
       </entry>
   </entries>
   <hops>
@@ -287,15 +287,6 @@
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>SetEnvironment</from>
-      <to>Calcular Sum. BH DAY IBHW</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>

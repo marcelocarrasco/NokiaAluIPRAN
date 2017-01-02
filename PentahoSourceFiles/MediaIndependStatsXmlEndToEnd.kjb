@@ -80,8 +80,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>48</xloc>
-      <yloc>240</yloc>
+      <xloc>32</xloc>
+      <yloc>128</yloc>
       </entry>
     <entry>
       <name>SetEnvironment</name>
@@ -113,8 +113,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>176</xloc>
-      <yloc>240</yloc>
+      <xloc>160</xloc>
+      <yloc>128</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -123,8 +123,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>32</yloc>
+      <xloc>192</xloc>
+      <yloc>464</yloc>
       </entry>
     <entry>
       <name>PopulateFILESTable</name>
@@ -154,8 +154,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>512</xloc>
-      <yloc>240</yloc>
+      <xloc>560</xloc>
+      <yloc>128</yloc>
       </entry>
     <entry>
       <name>Set FILE-NAME variable</name>
@@ -194,8 +194,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>352</xloc>
-      <yloc>240</yloc>
+      <xloc>336</xloc>
+      <yloc>128</yloc>
       </entry>
     <entry>
       <name>mediaIndepenStats_xml --&#x3e; XML_MEDIA_INDEPEND_STATS</name>
@@ -225,8 +225,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>128</yloc>
+      <xloc>192</xloc>
+      <yloc>336</yloc>
       </entry>
     <entry>
       <name>Hay Arch. mediaIndependStatsXml para procesar&#x3f;&#x3f;</name>
@@ -245,8 +245,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>240</yloc>
+      <xloc>560</xloc>
+      <yloc>224</yloc>
       </entry>
     <entry>
       <name>Job MediaIndependStatsXmlEndToEnd Aborted</name>
@@ -256,8 +256,26 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>384</yloc>
+      <xloc>160</xloc>
+      <yloc>224</yloc>
+      </entry>
+    <entry>
+      <name>Truncate XML_MEDIA_INDEPEND_STATS</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <connection>db_connection</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>XML_MEDIA_INDEPEND_STATS</name>
+          <schemaname>&#x24;&#x7b;DB-SCHEMA&#x7d;</schemaname>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>560</xloc>
+      <yloc>336</yloc>
       </entry>
   </entries>
   <hops>
@@ -299,15 +317,6 @@
     </hop>
     <hop>
       <from>Hay Arch. mediaIndependStatsXml para procesar&#x3f;&#x3f;</from>
-      <to>mediaIndepenStats_xml --&#x3e; XML_MEDIA_INDEPEND_STATS</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Hay Arch. mediaIndependStatsXml para procesar&#x3f;&#x3f;</from>
       <to>Job MediaIndependStatsXmlEndToEnd Aborted</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -318,6 +327,24 @@
     <hop>
       <from>mediaIndepenStats_xml --&#x3e; XML_MEDIA_INDEPEND_STATS</from>
       <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Hay Arch. mediaIndependStatsXml para procesar&#x3f;&#x3f;</from>
+      <to>Truncate XML_MEDIA_INDEPEND_STATS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Truncate XML_MEDIA_INDEPEND_STATS</from>
+      <to>mediaIndepenStats_xml --&#x3e; XML_MEDIA_INDEPEND_STATS</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

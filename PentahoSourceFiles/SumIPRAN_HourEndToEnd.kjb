@@ -250,7 +250,7 @@
       <clear_rows>Y</clear_rows>
       <clear_files>Y</clear_files>
       <set_logfile>Y</set_logfile>
-      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;up_process_to_run_status</logfile>
+      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;up_process_to_run_status</logfile>
       <logext>log</logext>
       <add_date>Y</add_date>
       <add_time>N</add_time>

@@ -76,7 +76,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>48</xloc>
-      <yloc>256</yloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>SetEnvironment</name>
@@ -109,7 +109,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>176</xloc>
-      <yloc>256</yloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -118,8 +118,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>16</yloc>
+      <xloc>208</xloc>
+      <yloc>448</yloc>
       </entry>
     <entry>
       <name>PopulateFILESTable</name>
@@ -150,7 +150,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>512</xloc>
-      <yloc>256</yloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Set FILE-NAME variable</name>
@@ -190,7 +190,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>352</xloc>
-      <yloc>256</yloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>SystemStats_xml_1 --&#x3e; XML_SYSTEM_STATS_1</name>
@@ -220,8 +220,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>112</yloc>
+      <xloc>208</xloc>
+      <yloc>336</yloc>
       </entry>
     <entry>
       <name>Hay Arch. SystemStatsXmlUno para procesar&#x3f;&#x3f;</name>
@@ -240,8 +240,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>256</yloc>
+      <xloc>512</xloc>
+      <yloc>208</yloc>
       </entry>
     <entry>
       <name>Job SystemStatsXmlUnoEndToEnd Aborted</name>
@@ -251,36 +251,26 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>368</yloc>
+      <xloc>176</xloc>
+      <yloc>208</yloc>
       </entry>
     <entry>
-      <name>Zip SystemStatsXmlUno files</name>
+      <name>Truncate XML_SYSTEM_STATS_1</name>
       <description/>
-      <type>ZIP_FILE</type>
-      <zipfilename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output&#x2f;CSV&#x2f;SystemStatsXmlUno.zip</zipfilename>
-      <compressionrate>2</compressionrate>
-      <ifzipfileexists>1</ifzipfileexists>
-      <wildcard>&#x24;&#x7b;SYSTEMSTATS-XML-UNO&#x7d;</wildcard>
-      <wildcardexclude/>
-      <sourcedirectory>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;xml_output</sourcedirectory>
-      <movetodirectory/>
-      <afterzip>1</afterzip>
-      <addfiletoresult>N</addfiletoresult>
-      <isfromprevious>N</isfromprevious>
-      <createparentfolder>N</createparentfolder>
-      <adddate>N</adddate>
-      <addtime>N</addtime>
-      <SpecifyFormat>Y</SpecifyFormat>
-      <date_time_format>yyyyMMddHHmmss</date_time_format>
-      <createMoveToDirectory>N</createMoveToDirectory>
-      <include_subfolders>Y</include_subfolders>
-      <stored_source_path_depth>1</stored_source_path_depth>
+      <type>TRUNCATE_TABLES</type>
+      <connection>db_connection</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>XML_SYSTEM_STATS_1</name>
+          <schemaname>&#x24;&#x7b;DB-SCHEMA&#x7d;</schemaname>
+        </field>
+      </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>560</xloc>
-      <yloc>80</yloc>
+      <xloc>513</xloc>
+      <yloc>335</yloc>
       </entry>
   </entries>
   <hops>
@@ -322,15 +312,6 @@
     </hop>
     <hop>
       <from>Hay Arch. SystemStatsXmlUno para procesar&#x3f;&#x3f;</from>
-      <to>SystemStats_xml_1 --&#x3e; XML_SYSTEM_STATS_1</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Hay Arch. SystemStatsXmlUno para procesar&#x3f;&#x3f;</from>
       <to>Job SystemStatsXmlUnoEndToEnd Aborted</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -340,25 +321,25 @@
     </hop>
     <hop>
       <from>SystemStats_xml_1 --&#x3e; XML_SYSTEM_STATS_1</from>
-      <to>Zip SystemStatsXmlUno files</to>
+      <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Zip SystemStatsXmlUno files</from>
-      <to>Success</to>
+      <from>Hay Arch. SystemStatsXmlUno para procesar&#x3f;&#x3f;</from>
+      <to>Truncate XML_SYSTEM_STATS_1</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>SystemStats_xml_1 --&#x3e; XML_SYSTEM_STATS_1</from>
-      <to>Success</to>
+      <from>Truncate XML_SYSTEM_STATS_1</from>
+      <to>SystemStats_xml_1 --&#x3e; XML_SYSTEM_STATS_1</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

@@ -225,7 +225,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>544</xloc>
+      <xloc>224</xloc>
       <yloc>304</yloc>
       </entry>
     <entry>
@@ -246,7 +246,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>544</xloc>
-      <yloc>208</yloc>
+      <yloc>192</yloc>
       </entry>
     <entry>
       <name>Job SystemStatsXmlTresEndToEnd Aborted</name>
@@ -257,7 +257,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>176</xloc>
-      <yloc>208</yloc>
+      <yloc>192</yloc>
       </entry>
     <entry>
       <name>Pop. ALC_SYSTEM_CPU_STATS_IPRAN_RAW Table</name>
@@ -291,6 +291,24 @@
       <nr>0</nr>
       <xloc>224</xloc>
       <yloc>416</yloc>
+      </entry>
+    <entry>
+      <name>Truncate XML_SYSTEM_STATS_3</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <connection>db_connection</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>XML_SYSTEM_STATS_3</name>
+          <schemaname>&#x24;&#x7b;DB-SCHEMA&#x7d;</schemaname>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>544</xloc>
+      <yloc>304</yloc>
       </entry>
   </entries>
   <hops>
@@ -332,15 +350,6 @@
     </hop>
     <hop>
       <from>Hay Arch. SystemStatsXmlTres para procesar&#x3f;&#x3f;</from>
-      <to>SystemStats_xml_3 --&#x3e; XML_SYSTEM_STATS_3</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Hay Arch. SystemStatsXmlTres para procesar&#x3f;&#x3f;</from>
       <to>Job SystemStatsXmlTresEndToEnd Aborted</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -360,6 +369,24 @@
     <hop>
       <from>SystemStats_xml_3 --&#x3e; XML_SYSTEM_STATS_3</from>
       <to>Pop. ALC_SYSTEM_CPU_STATS_IPRAN_RAW Table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Hay Arch. SystemStatsXmlTres para procesar&#x3f;&#x3f;</from>
+      <to>Truncate XML_SYSTEM_STATS_3</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Truncate XML_SYSTEM_STATS_3</from>
+      <to>SystemStats_xml_3 --&#x3e; XML_SYSTEM_STATS_3</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

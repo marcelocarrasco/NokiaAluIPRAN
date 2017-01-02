@@ -118,7 +118,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>288</xloc>
+      <xloc>736</xloc>
       <yloc>448</yloc>
       </entry>
     <entry>
@@ -220,7 +220,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>688</xloc>
+      <xloc>320</xloc>
       <yloc>336</yloc>
       </entry>
     <entry>
@@ -284,7 +284,25 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>288</xloc>
+      <xloc>320</xloc>
+      <yloc>448</yloc>
+      </entry>
+    <entry>
+      <name>Truncate XML_MEDIA_INDEPEND_STATS_1</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <connection>db_connection</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>XML_MEDIA_INDEPEND_STATS_1</name>
+          <schemaname>&#x24;&#x7b;DB-SCHEMA&#x7d;</schemaname>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>688</xloc>
       <yloc>336</yloc>
       </entry>
   </entries>
@@ -327,15 +345,6 @@
     </hop>
     <hop>
       <from>Hay Arch. mediaIndependStatsXml_1 para procesar&#x3f;&#x3f;</from>
-      <to>mediaIndepenStats_xml_1 --&#x3e; XML_MEDIA_INDEPEND_STATS_1</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Hay Arch. mediaIndependStatsXml_1 para procesar&#x3f;&#x3f;</from>
       <to>Job MediaIndependStatsXmlUnoEndToEnd Aborted</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -355,6 +364,24 @@
     <hop>
       <from>mediaIndepenStats_xml_1 --&#x3e; XML_MEDIA_INDEPEND_STATS_1</from>
       <to>Pop. ALC_MEDIA_INDP_STATS_IPRAN_RAW Table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Hay Arch. mediaIndependStatsXml_1 para procesar&#x3f;&#x3f;</from>
+      <to>Truncate XML_MEDIA_INDEPEND_STATS_1</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Truncate XML_MEDIA_INDEPEND_STATS_1</from>
+      <to>mediaIndepenStats_xml_1 --&#x3e; XML_MEDIA_INDEPEND_STATS_1</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

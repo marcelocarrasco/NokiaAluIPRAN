@@ -287,6 +287,24 @@
       <xloc>224</xloc>
       <yloc>416</yloc>
       </entry>
+    <entry>
+      <name>Truncate XML_NTWQOS_1</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <connection>db_connection</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>XML_NTWQOS_1</name>
+          <schemaname>&#x24;&#x7b;DB-SCHEMA&#x7d;</schemaname>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>378</xloc>
+      <yloc>300</yloc>
+      </entry>
   </entries>
   <hops>
     <hop>
@@ -326,15 +344,6 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Hay Arch. NtwQosXml_1 para procesar&#x3f;&#x3f;</from>
-      <to>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>PopulateFILESTable</from>
       <to>Hay Arch. NtwQosXml_1 para procesar&#x3f;&#x3f;</to>
       <from_nr>0</from_nr>
@@ -355,6 +364,24 @@
     <hop>
       <from>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</from>
       <to>Populate ALC_LAGS_IPRAN_SCNEOLR_RAW Table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Hay Arch. NtwQosXml_1 para procesar&#x3f;&#x3f;</from>
+      <to>Truncate XML_NTWQOS_1</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Truncate XML_NTWQOS_1</from>
+      <to>NtwQos_xml_1 --&#x3e; XML_NTWQOS_1</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

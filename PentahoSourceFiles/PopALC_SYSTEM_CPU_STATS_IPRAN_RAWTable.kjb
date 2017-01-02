@@ -88,37 +88,6 @@
       <yloc>112</yloc>
       </entry>
     <entry>
-      <name>Import Data To XML_SYSTEM_STATS_3 Table</name>
-      <description/>
-      <type>JOB</type>
-      <specification_method>filename</specification_method>
-      <job_object_id/>
-      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;ImportDataToXML_SYSTEM_STATS_3Table.kjb</filename>
-      <jobname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>Y</set_logfile>
-      <logfile>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoLogs&#x2f;import_data_to_xml_system_stats_3_table</logfile>
-      <logext>log</logext>
-      <add_date>Y</add_date>
-      <add_time>N</add_time>
-      <loglevel>Error</loglevel>
-      <slave_server_name/>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <expand_remote_job>N</expand_remote_job>
-      <create_parent_folder>N</create_parent_folder>
-      <pass_export>N</pass_export>
-      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>      <set_append_logfile>N</set_append_logfile>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>688</xloc>
-      <yloc>224</yloc>
-      </entry>
-    <entry>
       <name>Ins. Process To Run HOUR</name>
       <description/>
       <type>TRANS</type>
@@ -149,7 +118,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>688</xloc>
-      <yloc>368</yloc>
+      <yloc>288</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -159,7 +128,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>864</xloc>
-      <yloc>368</yloc>
+      <yloc>288</yloc>
       </entry>
     <entry>
       <name>SystemStatsXmlTresEndToEnd</name>
@@ -282,15 +251,6 @@
     </hop>
     <hop>
       <from>Set FILE-NAME variable</from>
-      <to>Import Data To XML_SYSTEM_STATS_3 Table</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Import Data To XML_SYSTEM_STATS_3 Table</from>
       <to>Ins. Process To Run HOUR</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>

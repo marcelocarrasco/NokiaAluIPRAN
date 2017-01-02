@@ -119,7 +119,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>256</xloc>
-      <yloc>384</yloc>
+      <yloc>432</yloc>
       </entry>
     <entry>
       <name>PopulateFILESTable</name>
@@ -221,7 +221,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>560</xloc>
-      <yloc>384</yloc>
+      <yloc>432</yloc>
       </entry>
     <entry>
       <name>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</name>
@@ -253,6 +253,24 @@
       <nr>0</nr>
       <xloc>240</xloc>
       <yloc>240</yloc>
+      </entry>
+    <entry>
+      <name>Truncate XML_CARD_STATUS</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <connection>db_connection</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>XML_CARD_STATUS</name>
+          <schemaname>&#x24;&#x7b;DB-SCHEMA&#x7d;</schemaname>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>560</xloc>
+      <yloc>320</yloc>
       </entry>
   </entries>
   <hops>
@@ -294,15 +312,6 @@
     </hop>
     <hop>
       <from>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</from>
-      <to>CardStatus_xml --&#x3e; XML_CARD_STATUS</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</from>
       <to>Job CarsStatusXmlEndToEnd Aborted</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -313,6 +322,24 @@
     <hop>
       <from>CardStatus_xml --&#x3e; XML_CARD_STATUS</from>
       <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Hay Arch. CardStatus para procesar&#x3f;&#x3f;</from>
+      <to>Truncate XML_CARD_STATUS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Truncate XML_CARD_STATUS</from>
+      <to>CardStatus_xml --&#x3e; XML_CARD_STATUS</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
