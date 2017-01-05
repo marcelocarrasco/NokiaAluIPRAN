@@ -65,5 +65,21 @@ CREATE TYPE ALC_IPRAN_LINKS_tapi_tab IS TABLE OF ALC_IPRAN_LINKS_TAPI_REC;
 
  -- insert
   PROCEDURE INS_ALC_IPRAN_LINKS(P_DATASET IN ALC_IPRAN_LINKS_TAPI_REC);
+--  begin
+--    FORALL i IN emp_rec.first..emp_rec.last
+--MERGE INTO emp t
+--USING dual
+--ON ( t.emp_id = emp_rec(i).emp_id 
+-- AND t.emp_dept = emp_rec(i).emp_dept )
+--WHEN MATCHED THEN
+-- UPDATE SET
+-- t.col1 = emp_rec(i).col1,
+-- t.col2= emp_rec(i).col2,
+-- ...
+--WHEN NOT MATCHED THEN
+-- INSERT (col1, col2, col3, ...)
+-- VALUES (emp_rec(i).col1, emp_rec(i).col2, emp_rec(i).col3, ...)
+--;
+--end;
   -- update
   PROCEDURE UPD_ALC_IPRAN_LINKS(P_DATASET IN ALC_IPRAN_LINKS_TAPI_REC);

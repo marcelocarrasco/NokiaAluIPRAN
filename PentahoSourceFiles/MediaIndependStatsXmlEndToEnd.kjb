@@ -11,11 +11,6 @@
   <modified_user>-</modified_user>
   <modified_date>2016&#x2f;11&#x2f;16 14&#x3a;52&#x3a;03.357</modified_date>
     <parameters>
-        <parameter>
-            <name>FECHA-PROC</name>
-            <default_value/>
-            <description/>
-        </parameter>
     </parameters>
   <connection>
     <name>db_connection</name>

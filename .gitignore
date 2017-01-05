@@ -8,4 +8,4 @@
 /xml_output/logs/*
 *.gz
 /Scripts/*.lst
-
+*.csv
