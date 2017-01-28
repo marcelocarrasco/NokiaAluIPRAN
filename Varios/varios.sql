@@ -1,48 +1,58 @@
+ select
+   c.owner,
+   c.object_name,
+   c.object_type,
+   b.sid,
+   b.serial#,
+   b.status,
+   b.osuser,
+   b.machine
+from
+   v$locked_object a ,
+   v$session b,
+   dba_objects c
+where
+   b.sid = a.session_id
+and
+   a.object_id = c.object_id;
+   
+   
+select a.session_id,a.oracle_username, a.os_user_name, b.owner "OBJECT OWNER", b.object_name,b.object_type,a.locked_mode from 
+(select object_id, SESSION_ID, ORACLE_USERNAME, OS_USER_NAME, LOCKED_MODE from v$locked_object) a, 
+(select object_id, owner, object_name,object_type from dba_objects) b
+where a.object_id=b.object_id;   
 
---set verify off
---define fecha='01.12.2016'
---delete from ALC_MEDIA_INDP_STATS_IPRAN_RAW where to_char(fecha,'DD.MM.YYYY') = '&fecha';
+
+--truncate table XML_MEDIA_INDEPEND_STATS;
+--truncate table XML_MEDIA_INDEPEND_STATS_1;
+--truncate table XML_SYSTEM_STATS;
+--truncate table XML_SYSTEM_STATS_1;
+--truncate table XML_SYSTEM_STATS_2;
+--truncate table XML_SYSTEM_STATS_3;
+--truncate table XML_NTWQOS;
+--truncate table XML_NTWQOS_1;
+--truncate table XML_CARD_STATUS;
 --
---delete from XML_MEDIA_INDEPEND_STATS where substr(fecha,1,10) = '&fecha';
---delete from XML_MEDIA_INDEPEND_STATS_1 where substr(fecha,1,10) = '&fecha';
---delete from XML_SYSTEM_STATS where substr(fecha,1,10) = '&fecha';
---delete from XML_SYSTEM_STATS_1 where substr(fecha,1,10) = '&fecha';
---delete from XML_SYSTEM_STATS_2 where substr(fecha,1,10) = '&fecha';
---delete from XML_SYSTEM_STATS_3 where substr(fecha,1,10) = '&fecha';
---delete from XML_NTWQOS where substr(fecha,1,10) = '&fecha';
---delete from XML_NTWQOS_1 where substr(fecha,1,10) = '&fecha';
---delete from XML_CARD_STATUS where substr(fecha,1,10) = '&fecha';
-
-truncate table XML_MEDIA_INDEPEND_STATS;
-truncate table XML_MEDIA_INDEPEND_STATS_1;
-truncate table XML_SYSTEM_STATS;
-truncate table XML_SYSTEM_STATS_1;
-truncate table XML_SYSTEM_STATS_2;
-truncate table XML_SYSTEM_STATS_3;
-truncate table XML_NTWQOS;
-truncate table XML_NTWQOS_1;
-truncate table XML_CARD_STATUS;
-
---------------------------------------------------------------------------------
-truncate table ALC_STATS_CPUMEM_BH;                                             
-truncate table ALC_STATS_CPUMEM_DAY;                                            
-truncate table ALC_STATS_CPUMEM_IBHW;                                           
-truncate table ALC_STATS_IPRAN_BH;                                              
-truncate table ALC_STATS_IPRAN_DAY;                                             
-truncate table ALC_STATS_IPRAN_IBHW;                                            
-truncate table ALC_CARDSLOT_IPRAN_OBJ;                                          
-truncate table ALC_PHYSICALPORT_IPRAN_OBJ;
---------------------------------------------------------------------------------
-truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
-truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
-truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
-truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
-truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
---------------------------------------------------------------------------------
-truncate table ALC_STATS_CPUMEM_HOUR;                                           
-truncate table ALC_STATS_IPRAN_HOUR; 
---------------------------------------------------------------------------------
-truncate table files;
+----------------------------------------------------------------------------------
+--truncate table ALC_STATS_CPUMEM_BH;                                             
+--truncate table ALC_STATS_CPUMEM_DAY;                                            
+--truncate table ALC_STATS_CPUMEM_IBHW;                                           
+--truncate table ALC_STATS_IPRAN_BH;                                              
+--truncate table ALC_STATS_IPRAN_DAY;                                             
+--truncate table ALC_STATS_IPRAN_IBHW;                                            
+--truncate table ALC_CARDSLOT_IPRAN_OBJ;                                          
+--truncate table ALC_PHYSICALPORT_IPRAN_OBJ;
+----------------------------------------------------------------------------------
+--truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
+--truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
+--truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
+--truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
+--truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
+----------------------------------------------------------------------------------
+--truncate table ALC_STATS_CPUMEM_HOUR;                                           
+--truncate table ALC_STATS_IPRAN_HOUR; 
+----------------------------------------------------------------------------------
+--truncate table files;
 --------------------------------------------------------------------------------
 create public synonym ALC_LAGS_IPRAN_SCNEOLR_RAW for mcarrasco.ALC_LAGS_IPRAN_SCNEOLR_RAW;
 create public synonym ALC_LAGS_IPRAN_SCNIOLR_RAW for mcarrasco.ALC_LAGS_IPRAN_SCNIOLR_RAW;
@@ -204,3 +214,65 @@ WHERE STATUS != 0
 AND   PROCESADO IS NULL
 AND   FEHCA_TO_RUN = '20.12.2016 13' --${FECHA-PROC} -- DD.MM.YYYY HH24
 ;
+
+-------------------------------------------------------------------------
+select fecha
+from CSCO_INTERFACE_HOUR
+where to_date(to_char(fecha,'DD.MM.YYYY'),'DD.MM.YYYY') between to_date('01.01.2017','DD.MM.YYYY') 
+                                                          and to_date('10.01.2017','DD.MM.YYYY')
+group by fecha;
+
+desc user_tab_columns
+SET FEEDBACK OFF
+SET HEAD OFF
+
+select column_name||','
+from user_tab_columns
+where table_name = 'CSCO_LINKS'
+order by COLUMN_ID;
+
+select ''''||COLUMN_NAME||' => '''||CHR(124)||CHR(124)||'P_LINKS_DATA(indice).'||column_name||CHR(124)||CHR(124)
+from user_tab_columns
+where table_name = 'CSCO_LINKS'
+order by COLUMN_ID;
+
+select column_name||'= CSCO_LINKS_tapi_tab(indice).'||column_name||','
+from user_tab_columns
+where table_name = 'CSCO_LINKS'
+order by COLUMN_ID;
+
+SELECT ASCII('|') FROM DUAL;
+ 
+ 
+ SELECT ELEMENT_ALIASES,COUNT(*)
+FROM CSCO_LINKS 
+GROUP BY ELEMENT_ALIASES
+
+select * 
+from csco_links cl,
+(select element_aliases,count(*)
+from csco_links
+GROUP by element_aliases
+having count(*) > 1) cl2
+where cl.element_aliases = cl2.element_aliases;
+
+
+CREATE TABLE CSCO_LINKS_DUP AS
+delete FROM CSCO_LINKS
+WHERE ELEMENT_ALIASES IN ('nros01rt09-Ten0-1-0_to_TS1001-PEH-02-Ten0-1-0-2',
+'ROS-P-R02_Giga0-0-2-0',
+'TME298-PEI-01-Giga2-0-0_to_TME298-PEH-01-Giga0-0-0-0',
+'ASU-PE-R01-Ten7-2_to_ASU-PE-R02-Ten7-2',
+'nros01rt09-Ten1-1-0_to_TS1001-PEH-01-Ten0-1-0-2',
+'CR001-PD-02-Ten0-0-0-0_to_CF223-P-02-Ten0-4-0-6')
+
+-----------------------------------------------------
+--WEEK FROM SUNDAY THROUGTH SATURDAY
+
+select TRUNC(sysdate, 'iw')-1 AS SUNDAY,
+       TRUNC(sysdate, 'iw') + 6 - 1/86400 AS SATURDAY
+from dual;
+-- FOR A GIVEN DAY, GET FIRST AND LAST DAY OF THE WEEK THAT BELONGS TO
+select TRUNC(TO_DATE('26.01.2017','DD.MM.YYYY'), 'iw')-1 AS SUNDAY,
+       TRUNC(TO_DATE('26.01.2017','DD.MM.YYYY'), 'iw') + 6 - 1/86400 AS SATURDAY
+from dual;
