@@ -1,3 +1,49 @@
+ /*
+ 
+ -- truncate
+SELECT 'ALTER TABLE '||TABLE_NAME||' TRUNCATE PARTITION '||PARTITION_NAME||';' 
+FROM USER_TAB_PARTITIONS
+WHERE TABLE_NAME LIKE 'CSCO_INTERFACE_HOUR'
+AND PARTITION_NAME LIKE '%20170201%'
+ORDER BY TABLE_NAME,PARTITION_NAME ASC;
+
+
+select segment_name,segment_type,SUM(bytes/1024/1024) MB
+from dba_segments
+where segment_type='TABLE PARTITION'-- and segment_name LIKE 'CSCO%_HOUR' --IN ('ALC_SYSTEM_CPU_STATS_IPRAN_RAW','ALC_SYSTEM_MEM_STATS_IPRAN_RAW')
+GROUP BY segment_name,segment_type
+order by 3 desc;
+
+
+
+
+
+
+delete 
+from csco_interface_hour
+where to_char(fecha,'DD.MM.YYYY') = '01.02.2017';
+
+
+
+select nombre_csv
+from files
+where  status = 5
+and nombre_csv like '%INTERFACE.%'
+order by 1
+
+
+ select v.SQL_TEXT,
+           v.PARSING_SCHEMA_NAME,
+           v.FIRST_LOAD_TIME,
+           v.DISK_READS,
+           v.ROWS_PROCESSED,
+           v.ELAPSED_TIME,
+           v.service
+      from v$sql v
+      
+*/
+ 
+ 
  select
    c.owner,
    c.object_name,
@@ -22,6 +68,63 @@ select a.session_id,a.oracle_username, a.os_user_name, b.owner "OBJECT OWNER", b
 (select object_id, owner, object_name,object_type from dba_objects) b
 where a.object_id=b.object_id;   
 
+select sid,serial#,username,machine,module,sql_id from v$session
+where schemaname not in ('SYS','DBSNMP');
+
+SELECT sess.sid, sess.serial#,sess.process, sess.status, sess.username, sess.schemaname, sql.sql_text
+FROM  v$session sess, 
+      v$sql     sql 
+WHERE sql.sql_id(+) = sess.sql_id 
+AND sess.type     = 'USER';
+
+select * from v$sql
+where sql_id = '3auz39vsbapkt';
+
+SELECT 
+  p.spid                      unix_spid,
+  s.sid                       sid, 
+  p.addr,
+  s.paddr,
+  substr(s.username, 1, 10)   username, 
+  substr(s.schemaname, 1, 10) schemaname, 
+  s.command                   command,
+  substr(s.osuser, 1, 10)     osuser, 
+  substr(s.machine, 1, 25)    machine
+FROM   v$session s, v$process p
+WHERE  s.paddr=p.addr
+AND s.schemaname = 'SMART'
+ORDER BY p.spid;
+
+SELECT XIDUSN,OBJECT_ID,SESSION_ID,ORACLE_USERNAME,OS_USER_NAME,PROCESS from v$locked_object;
+
+SELECT d.OBJECT_ID, substr(OBJECT_NAME,1,20), l.SESSION_ID, l.ORACLE_USERNAME, l.LOCKED_MODE
+from   v$locked_object l, dba_objects d
+where  d.OBJECT_ID=l.OBJECT_ID;
+
+select 
+   blocking_session, 
+   sid, 
+   serial#, 
+   wait_class,
+   seconds_in_wait
+from 
+   v$session
+where 
+   blocking_session is not NULL
+order by 
+   blocking_session;
+
+
+SELECT * --spid
+FROM   v$process
+WHERE NOT EXISTS (SELECT 1
+                  FROM v$session
+                  WHERE paddr = addr);
+
+SELECT s.sid, s.serial#, p.spid
+FROM v$process p, v$session s
+WHERE p.addr = s.paddr
+AND s.username = 'SMART';                  
 
 --truncate table XML_MEDIA_INDEPEND_STATS;
 --truncate table XML_MEDIA_INDEPEND_STATS_1;
@@ -273,6 +376,165 @@ select TRUNC(sysdate, 'iw')-1 AS SUNDAY,
        TRUNC(sysdate, 'iw') + 6 - 1/86400 AS SATURDAY
 from dual;
 -- FOR A GIVEN DAY, GET FIRST AND LAST DAY OF THE WEEK THAT BELONGS TO
-select TRUNC(TO_DATE('26.01.2017','DD.MM.YYYY'), 'iw')-1 AS SUNDAY,
-       TRUNC(TO_DATE('26.01.2017','DD.MM.YYYY'), 'iw') + 6 - 1/86400 AS SATURDAY
+select TRUNC(TO_DATE('30.01.2017','DD.MM.YYYY'), 'iw')-1 AS SUNDAY,
+       TRUNC(TO_DATE('30.01.2017','DD.MM.YYYY'), 'iw') + 6 - 1/86400 AS SATURDAY
 from dual;
+-- Get week of the year
+SELECT to_char(to_date('28.01.2017', 'dd-mm-yyyy'), 'ww') as weeknumber from dual;
+
+-- Get current week
+SELECT to_char(TO_DATE('29.01.2017','DD.MM.YYYY'), 'ww') as weeknumber from dual;
+
+/*
+Seria mas o menos asi:
+Si la fecha esta en current_week, no recalcular IBHW.
+Si esta, recalcular la IBHW.
+
+*/
+CREATE OR REPLACE FUNCTION F_RECALCULAR_IBHW(P_DATE IN VARCHAR2) RETURN NUMBER IS
+  V_CURRENT_WEEK  NUMBER; -- week
+  V_DATE_WEEK     NUMBER; -- week that given date belongs to
+BEGIN
+  SELECT  TO_CHAR(TO_DATE(P_DATE, 'DD.MM.YYYY'), 'ww') AS WEEKNUMBER 
+  INTO    V_DATE_WEEK
+  FROM    DUAL;
+  --
+  SELECT  TO_CHAR(SYSDATE, 'ww') AS WEEKNUMBER 
+  INTO    V_CURRENT_WEEK
+  FROM    DUAL;
+  --
+  IF V_CURRENT_WEEK != V_DATE_WEEK THEN
+    RETURN 1;
+  END IF;
+  --
+  RETURN 0;
+END F_RECALCULAR_IBHW;
+
+
+SELECT F_RECALCULAR_IBHW('07.01.2017') FROM DUAL;
+--------------------------------------------------------
+--------------------------------------------------------
+-- PARTICIONES ---
+--------------------------------------------------------
+SELECT  PARTITION_NAME,
+        HIGH_VALUE
+FROM  USER_TAB_PARTITIONS
+WHERE TABLE_NAME = 'ALC_STATS_IPRAN_HOUR'
+AND INTERVAL = 'YES';
+              
+              
+--ALTER TABLE sales DROP PARTITION FOR(TO_DATE('01-SEP-2007','dd-MON-yyyy'));
+
+--TO_DATE(' 2016-12-30 00:00:00', 'SYYYY-MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREGORIAN')
+
+CREATE OR REPLACE PROCEDURE DROP_INTERVAL_PARTITION_SP(P_TABLA IN VARCHAR2,P_TIMESTAMP IN VARCHAR2)
+IS
+    CURSOR V_CUR
+      IS
+        SELECT  PARTITION_NAME,
+                HIGH_VALUE
+          FROM  USER_TAB_PARTITIONS
+          WHERE TABLE_NAME = 'ALC_STATS_IPRAN_HOUR'
+          AND INTERVAL = 'YES';
+  V_HIGH_VALUE TIMESTAMP;
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER SESSION SET NLS_DATE_FORMART= ''YYYY-MM-DD HH24:MI:SS''';
+   FOR V_REC IN V_CUR LOOP
+      EXECUTE IMMEDIATE 'BEGIN :1 := ' || V_REC.HIGH_VALUE || '; END;'
+        USING OUT V_HIGH_VALUE;
+      IF V_HIGH_VALUE = TO_CHAR(TO_DATE(P_TIMESTAMP,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') --TRUNC(SYSDATE,'MM')
+        THEN
+          DBMS_OUTPUT.PUT_LINE('ALTER TABLE '||P_TABLA||' DROP PARTITION ' || V_REC.PARTITION_NAME || ';');
+          --EXECUTE IMMEDIATE 'ALTER TABLE INTERVAL_PART_TEST DROP PARTITION ' || V_REC.PARTITION_NAME;
+      END IF;
+    END LOOP;
+END;
+
+
+SET SERVEROUTPUT ON
+
+EXEC DROP_INTERVAL_PARTITION_SP('ALC_STATS_IPRAN_HOUR','2017-01-20 00:00:00');
+
+
+
+--continuar con el dia 13
+
+insert into csco_interface_hour(
+FECHA,
+NODE,
+INTERFAZ,
+IFINDEX,
+IFTYPE,
+IFSPEED,
+SENDUTIL,
+SENDTOTALPKTS,
+SENDTOTALPKTRATE,
+SENDBYTES,
+SENDBYTERATE,
+SENDBITRATE,
+SENDUCASTPKTPERCENT,
+SENDMCASTPKTPERCENT,
+SENDBCASTPKTPERCENT,
+SENDERRORS,
+SENDERRORPERCENT,
+SENDDISCARDS,
+SENDDISCARDPERCENT,
+RECEIVEUTIL,
+RECEIVETOTALPKTS,
+RECEIVETOTALPKTRATE,
+RECEIVEBYTES,
+RECEIVEBYTERATE,
+RECEIVEBITRATE,
+RECEIVEUCASTPKTPERCENT,
+RECEIVEMCASTPKTPERCENT,
+RECEIVEBCASTPKTPERCENT,
+RECEIVEERRORS,
+RECEIVEERRORPERCENT,
+RECEIVEDISCARDS,
+RECEIVEDISCARDPERCENT,
+SENDBCASTPKTRATE,
+RECEIVEBCASTPKTRATE,
+IFTYPESTRING)
+select 
+FECHA,
+NODE,
+INTERFAZ,
+IFINDEX,
+IFTYPE,
+IFSPEED,
+SENDUTIL,
+SENDTOTALPKTS,
+SENDTOTALPKTRATE,
+SENDBYTES,
+SENDBYTERATE,
+SENDBITRATE,
+SENDUCASTPKTPERCENT,
+SENDMCASTPKTPERCENT,
+SENDBCASTPKTPERCENT,
+SENDERRORS,
+SENDERRORPERCENT,
+SENDDISCARDS,
+SENDDISCARDPERCENT,
+RECEIVEUTIL,
+RECEIVETOTALPKTS,
+RECEIVETOTALPKTRATE,
+RECEIVEBYTES,
+RECEIVEBYTERATE,
+RECEIVEBITRATE,
+RECEIVEUCASTPKTPERCENT,
+RECEIVEMCASTPKTPERCENT,
+RECEIVEBCASTPKTPERCENT,
+RECEIVEERRORS,
+RECEIVEERRORPERCENT,
+RECEIVEDISCARDS,
+RECEIVEDISCARDPERCENT,
+SENDBCASTPKTRATE,
+RECEIVEBCASTPKTRATE,
+IFTYPESTRING
+from csco_interface_hour_old
+where to_char(fecha,'DD.MM.YYYY') = '12.01.2017';
+
+
+
+delete from csco_interface_hour_old
+where to_char(fecha,'DD.MM.YYYY') = '12.01.2017';

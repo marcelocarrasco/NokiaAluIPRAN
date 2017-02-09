@@ -1,6 +1,7 @@
 --
 -- Tabla auxiliar para almacenar la info del archivo YYYYMMDDHH24MI_SystemStats.xml
--- DROP TABLE XML_SYSTEM_STATS;
+
+DROP TABLE XML_SYSTEM_STATS;
 
 CREATE TABLE XML_SYSTEM_STATS (
   FECHA                       DATE GENERATED ALWAYS AS (TO_DATE(SUBSTR(NOMBRE_CSV,-26,2)||'.'||

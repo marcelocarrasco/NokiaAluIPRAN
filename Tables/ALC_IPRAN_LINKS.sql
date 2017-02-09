@@ -1,13 +1,15 @@
 -- drop table ALC_IPRAN_LINKS purge;
 
 CREATE TABLE ALC_IPRAN_LINKS (
-  ELEMENT_ID        NUMBER NOT NULL ENABLE, 
-  ELEMENT_ALIASES   VARCHAR2(500 CHAR), 
+  ELEMENT_ID        NUMBER, 
+  ELEMENT_ALIASES   VARCHAR2(500 CHAR) NOT NULL ENABLE, 
   VALID_START_DATE  DATE, 
   VALID_FINISH_DATE DATE, 
-  TIPO              VARCHAR2(40 CHAR), 
-  ORIGEN            VARCHAR2(40 CHAR), 
-  DESTINO           VARCHAR2(40 CHAR), 
+  TIPO              VARCHAR2(40 CHAR),
+  EQUIPO_A          VARCHAR2(50 CHAR) NOT NULL ENABLE,
+  INTERFACE_A       VARCHAR2(50 CHAR) NOT NULL ENABLE,
+  EQUIPO_B          VARCHAR2(50 CHAR) NOT NULL ENABLE,
+  INTERFACE_B       VARCHAR2(50 CHAR) NOT NULL ENABLE,
   FLAG_ENABLED      CHAR(1 CHAR), 
   GRUPO             VARCHAR2(50 CHAR), 
   PAIS              VARCHAR2(20 CHAR), 
@@ -23,7 +25,7 @@ CREATE TABLE ALC_IPRAN_LINKS (
 TABLESPACE DEVELOPER ;
 
 
-ALTER TABLE ALC_IPRAN_LINKS ADD CONSTRAINT PK_ALC_IPRAN_LINKS PRIMARY KEY (ELEMENT_ID);
+ALTER TABLE ALC_IPRAN_LINKS ADD CONSTRAINT PK_ALC_IPRAN_LINKS PRIMARY KEY (ELEMENT_ALIASES);
 ---------------------------------------------------------------------------------------
 -- SYNONYM
 ---------------------------------------------------------------------------------------
@@ -31,8 +33,8 @@ CREATE PUBLIC SYNONYM ALC_IPRAN_LINKS FOR MCARRASCO.ALC_IPRAN_LINKS;
 ---------------------------------------------------------------------------------------
 -- PRIV.
 ---------------------------------------------------------------------------------------
-GRANT SELECT ON ALC_IPRAN_LINKS TO FRINALDI;
-GRANT SELECT ON ALC_IPRAN_LINKS TO MSTUYCK;
+GRANT SELECT,INSERT, UPDATE ON ALC_IPRAN_LINKS TO FRINALDI;
+GRANT SELECT,INSERT, UPDATE ON ALC_IPRAN_LINKS TO MSTUYCK;
 ---------------------------------------------------------------------------------------
 -- TAPI
 ---------------------------------------------------------------------------------------

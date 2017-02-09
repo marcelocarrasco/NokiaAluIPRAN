@@ -1,6 +1,7 @@
 --
 -- Tabla auxiliar para almacenar la info del archivo YYYYMMDDHH24MI_CardStatus.xml VARCHAR2(100 CHAR)
--- DROP table XML_CARD_STATUS purge;
+
+DROP table XML_CARD_STATUS purge;
 
 CREATE TABLE XML_CARD_STATUS (
     MEDICION                  VARCHAR2(50 CHAR)

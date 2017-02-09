@@ -1,6 +1,7 @@
 --
 -- Tabla auxiliar para almacenar la info del archivo YYYYMMDDHH24MI_mediaIndependStats.xml
---  DROP TABLE XML_MEDIA_INDEPEND_STATS PURGE;
+
+DROP TABLE XML_MEDIA_INDEPEND_STATS PURGE;
 
 CREATE TABLE XML_MEDIA_INDEPEND_STATS (
     FECHA                         DATE GENERATED ALWAYS AS (TO_DATE(SUBSTR(NOMBRE_CSV,-33,2)||'.'||

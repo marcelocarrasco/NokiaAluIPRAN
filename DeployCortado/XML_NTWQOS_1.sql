@@ -1,6 +1,7 @@
 --
 -- Tabla auxiliar para almacenar la info del archivo YYYYMMDDHH24MI_NtwQos.xml_1
--- DROP TABLE XML_NTWQOS_1 PURGE;
+
+DROP TABLE XML_NTWQOS_1 PURGE;
 
 CREATE TABLE XML_NTWQOS_1 (
     FECHA                             DATE GENERATED ALWAYS AS (TO_DATE(SUBSTR(NOMBRE_CSV,-23,2)||'.'||
