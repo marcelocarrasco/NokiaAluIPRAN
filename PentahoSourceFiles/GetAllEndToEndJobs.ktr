@@ -167,12 +167,12 @@
       <exclude_filemask/>
       <file_required>N</file_required>
       <include_subfolders>N</include_subfolders>
-      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;CardStatusXmlEndToEnd.kjb</name>
+      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;MediaIndependStatsXmlEndToEnd.kjb</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
       <include_subfolders>N</include_subfolders>
-      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;MediaIndependStatsXmlEndToEnd.kjb</name>
+      <name>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;PentahoSourceFiles&#x2f;PopALC_CARDSLOT_IPRAN_RAWTable.kjb</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>

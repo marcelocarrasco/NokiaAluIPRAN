@@ -125,6 +125,34 @@ SELECT s.sid, s.serial#, p.spid
 FROM v$process p, v$session s
 WHERE p.addr = s.paddr
 AND s.username = 'SMART';                  
+------------------------------------------------------
+-- ESPACIO OCUPADO
+------------------------------------------------------
+select segment_name,segment_type,SUM(bytes/1024/1024) MB
+from dba_segments
+where segment_type='TABLE PARTITION' and segment_name LIKE '%_RAW' --IN ('ALC_SYSTEM_CPU_STATS_IPRAN_RAW','ALC_SYSTEM_MEM_STATS_IPRAN_RAW')
+and owner = 'SMART'
+GROUP BY segment_name,segment_type
+order by 3 desc;
+
+-- Tables + Size MB
+select owner, table_name, round((num_rows*avg_row_len)/(1024*1024)) MB 
+from all_tables 
+where owner not in ('SYS','SYSTEM')  -- Exclude system tables.
+and num_rows > 0  -- Ignore empty Tables.
+order by MB desc -- Biggest first.
+;
+
+
+--Tables + Rows
+select owner, table_name, num_rows
+ from all_tables 
+where owner not like 'SYS%'  -- Exclude system tables.
+and num_rows > 0  -- Ignore empty Tables.
+order by num_rows desc -- Biggest first.
+;
+---------------------------------------------------
+
 
 --truncate table XML_MEDIA_INDEPEND_STATS;
 --truncate table XML_MEDIA_INDEPEND_STATS_1;
@@ -146,11 +174,11 @@ AND s.username = 'SMART';
 --truncate table ALC_CARDSLOT_IPRAN_OBJ;                                          
 --truncate table ALC_PHYSICALPORT_IPRAN_OBJ;
 ----------------------------------------------------------------------------------
---truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
---truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
---truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
---truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
---truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
+truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
+truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
+truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
+truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
+truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
 ----------------------------------------------------------------------------------
 --truncate table ALC_STATS_CPUMEM_HOUR;                                           
 --truncate table ALC_STATS_IPRAN_HOUR; 
@@ -163,36 +191,37 @@ create public synonym ALC_MEDIA_INDP_STATS_IPRAN_RAW for mcarrasco.ALC_MEDIA_IND
 create public synonym ALC_SYSTEM_CPU_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                             
 create public synonym ALC_SYSTEM_MEM_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
 
-create public synonym ALC_STATS_CPUMEM_HOUR for MCARRASCO.ALC_STATS_CPUMEM_HOUR;
-create public synonym ALC_STATS_IPRAN_HOUR for MCARRASCO.ALC_STATS_IPRAN_HOUR;  
+create public synonym ALC_STATS_CPUMEM_HOUR for SMART.ALC_STATS_CPUMEM_HOUR;
+create public synonym ALC_STATS_IPRAN_HOUR for SMART.ALC_STATS_IPRAN_HOUR;  
 
-create public synonym ALC_STATS_CPUMEM_DAY for MCARRASCO.ALC_STATS_CPUMEM_DAY;  
-create public synonym ALC_STATS_IPRAN_DAY for MCARRASCO.ALC_STATS_IPRAN_DAY; 
+create public synonym ALC_STATS_CPUMEM_DAY for SMART.ALC_STATS_CPUMEM_DAY;  
+create public synonym ALC_STATS_IPRAN_DAY for SMART.ALC_STATS_IPRAN_DAY; 
 
-create public synonym ALC_STATS_CPUMEM_BH for MCARRASCO.ALC_STATS_CPUMEM_BH;    
-create public synonym ALC_STATS_IPRAN_BH for MCARRASCO.ALC_STATS_IPRAN_BH; 
+create public synonym ALC_STATS_CPUMEM_BH for SMART.ALC_STATS_CPUMEM_BH;    
+create public synonym ALC_STATS_IPRAN_BH for SMART.ALC_STATS_IPRAN_BH; 
 
-create public synonym ALC_STATS_IPRAN_IBHW for MCARRASCO.ALC_STATS_IPRAN_IBHW;  
-create public synonym ALC_STATS_CPUMEM_IBHW for MCARRASCO.ALC_STATS_CPUMEM_IBHW;
+create public synonym ALC_STATS_IPRAN_IBHW for SMART.ALC_STATS_IPRAN_IBHW;  
+create public synonym ALC_STATS_CPUMEM_IBHW for SMART.ALC_STATS_CPUMEM_IBHW;
 
-create public synonym ALC_CARDSLOT_IPRAN_OBJ for MCARRASCO.ALC_CARDSLOT_IPRAN_OBJ;
-create public synonym ALC_PHYSICALPORT_IPRAN_OBJ for MCARRASCO.ALC_PHYSICALPORT_IPRAN_OBJ;
+create public synonym ALC_CARDSLOT_IPRAN_OBJ for SMART.ALC_CARDSLOT_IPRAN_OBJ;
+create public synonym ALC_PHYSICALPORT_IPRAN_OBJ for SMART.ALC_PHYSICALPORT_IPRAN_OBJ;
 --------------------------------------------------------------------------------
 grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to mstuyck;
 grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to mstuyck;
 grant select on ALC_MEDIA_INDP_STATS_IPRAN_RAW to mstuyck;
 grant select on ALC_SYSTEM_CPU_STATS_IPRAN_RAW to mstuyck;                       
 grant select on ALC_SYSTEM_MEM_STATS_IPRAN_RAW to mstuyck;
-grant select on ALC_STATS_IPRAN_IBHW to mstuyck;                                
-grant select on ALC_STATS_CPUMEM_IBHW to mstuyck; 
-grant select on ALC_STATS_CPUMEM_BH to mstuyck;                                 
-grant select on ALC_STATS_IPRAN_BH to mstuyck;                                  
-grant select on ALC_STATS_CPUMEM_DAY to mstuyck;                                
-grant select on ALC_STATS_IPRAN_DAY to mstuyck;
-grant select on ALC_STATS_CPUMEM_HOUR to mstuyck;                               
-grant select on ALC_STATS_IPRAN_HOUR to mstuyck;  
-grant select on ALC_CARDSLOT_IPRAN_OBJ to mstuyck;                               
-grant select on ALC_PHYSICALPORT_IPRAN_OBJ to mstuyck;
+
+grant select on ALC_STATS_IPRAN_IBHW to PRFC;                                
+grant select on ALC_STATS_CPUMEM_IBHW to PRFC; 
+grant select on ALC_STATS_CPUMEM_BH to PRFC;                                 
+grant select on ALC_STATS_IPRAN_BH to PRFC;                                  
+grant select on ALC_STATS_CPUMEM_DAY to PRFC;                                
+grant select on ALC_STATS_IPRAN_DAY to PRFC;
+grant select on ALC_STATS_CPUMEM_HOUR to PRFC;                               
+grant select on ALC_STATS_IPRAN_HOUR to PRFC;  
+grant select on ALC_CARDSLOT_IPRAN_OBJ to PRFC;                               
+grant select on ALC_PHYSICALPORT_IPRAN_OBJ to PRFC;
 
 grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to frinaldi;
 grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to frinaldi;
