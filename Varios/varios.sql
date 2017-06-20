@@ -1,49 +1,24 @@
- /*
- 
- -- truncate
-SELECT 'ALTER TABLE '||TABLE_NAME||' TRUNCATE PARTITION '||PARTITION_NAME||';' 
-FROM USER_TAB_PARTITIONS
-WHERE TABLE_NAME LIKE 'CSCO_INTERFACE_HOUR'
-AND PARTITION_NAME LIKE '%20170201%'
-ORDER BY TABLE_NAME,PARTITION_NAME ASC;
+-- JOBS
+--
+select job_name, to_char(log_date,'DD.MM.YYYY HH24:MI:SS') log_date,status,errors
+from USER_SCHEDULER_JOB_RUN_DETAILS
+where status != 'SUCCEEDED'
+and to_date(to_char(log_date,'DD.MM.YYYY'),'DD.MM.YYYY') between (sysdate -7) and sysdate
+and job_name in (select job_name--,job_action,repeat_interval
+                from DBA_SCHEDULER_JOBS
+                where owner = 'SMART'
+                and REGEXP_LIKE (repeat_interval, '^FREQ=HOURLY(*)'))
+order by 2 desc;
 
+select job_name--,job_action,repeat_interval
+from DBA_SCHEDULER_JOBS
+where owner = 'SMART'
+and REGEXP_LIKE (repeat_interval, '^FREQ=HOURLY(*)');
 
-select segment_name,segment_type,SUM(bytes/1024/1024) MB
-from dba_segments
-where segment_type='TABLE PARTITION'-- and segment_name LIKE 'CSCO%_HOUR' --IN ('ALC_SYSTEM_CPU_STATS_IPRAN_RAW','ALC_SYSTEM_MEM_STATS_IPRAN_RAW')
-GROUP BY segment_name,segment_type
-order by 3 desc;
-
-
-
-
-
-
-delete 
-from csco_interface_hour
-where to_char(fecha,'DD.MM.YYYY') = '01.02.2017';
-
-
-
-select nombre_csv
-from files
-where  status = 5
-and nombre_csv like '%INTERFACE.%'
-order by 1
-
-
- select v.SQL_TEXT,
-           v.PARSING_SCHEMA_NAME,
-           v.FIRST_LOAD_TIME,
-           v.DISK_READS,
-           v.ROWS_PROCESSED,
-           v.ELAPSED_TIME,
-           v.service
-      from v$sql v
-      
-*/
- 
- 
+-- FREQ=HOURLY;BYDAY=MON,TUE,WED,THU,FRI
+--
+--
+-- PARA VER LAS SESIONES 
  select
    c.owner,
    c.object_name,
@@ -61,8 +36,8 @@ where
    b.sid = a.session_id
 and
    a.object_id = c.object_id;
-   
-   
+--   
+--   
 select a.session_id,a.oracle_username, a.os_user_name, b.owner "OBJECT OWNER", b.object_name,b.object_type,a.locked_mode from 
 (select object_id, SESSION_ID, ORACLE_USERNAME, OS_USER_NAME, LOCKED_MODE from v$locked_object) a, 
 (select object_id, owner, object_name,object_type from dba_objects) b
@@ -78,8 +53,11 @@ WHERE sql.sql_id(+) = sess.sql_id
 AND sess.type     = 'USER';
 
 select * from v$sql
-where sql_id = '3auz39vsbapkt';
+where sql_id = '40a4uwyy0n94h';
 
+--
+-- PARA VER EL UNIX_SPID
+--
 SELECT 
   p.spid                      unix_spid,
   s.sid                       sid, 
@@ -94,7 +72,8 @@ FROM   v$session s, v$process p
 WHERE  s.paddr=p.addr
 AND s.schemaname = 'SMART'
 ORDER BY p.spid;
-
+--
+--
 SELECT XIDUSN,OBJECT_ID,SESSION_ID,ORACLE_USERNAME,OS_USER_NAME,PROCESS from v$locked_object;
 
 SELECT d.OBJECT_ID, substr(OBJECT_NAME,1,20), l.SESSION_ID, l.ORACLE_USERNAME, l.LOCKED_MODE
@@ -128,11 +107,11 @@ AND s.username = 'SMART';
 ------------------------------------------------------
 -- ESPACIO OCUPADO
 ------------------------------------------------------
-select segment_name,segment_type,SUM(bytes/1024/1024) MB
+select owner,segment_name,segment_type,SUM(bytes/1024/1024) MB
 from dba_segments
-where segment_type='TABLE PARTITION' and segment_name LIKE '%_RAW' --IN ('ALC_SYSTEM_CPU_STATS_IPRAN_RAW','ALC_SYSTEM_MEM_STATS_IPRAN_RAW')
-and owner = 'SMART'
-GROUP BY segment_name,segment_type
+where segment_type='TABLE PARTITION'-- and segment_name LIKE '%_RAW' --IN ('ALC_SYSTEM_CPU_STATS_IPRAN_RAW','ALC_SYSTEM_MEM_STATS_IPRAN_RAW')
+--and owner = 'MPELLEGRINI'
+GROUP BY owner,segment_name,segment_type
 order by 3 desc;
 
 -- Tables + Size MB
@@ -151,94 +130,6 @@ where owner not like 'SYS%'  -- Exclude system tables.
 and num_rows > 0  -- Ignore empty Tables.
 order by num_rows desc -- Biggest first.
 ;
----------------------------------------------------
-
-
---truncate table XML_MEDIA_INDEPEND_STATS;
---truncate table XML_MEDIA_INDEPEND_STATS_1;
---truncate table XML_SYSTEM_STATS;
---truncate table XML_SYSTEM_STATS_1;
---truncate table XML_SYSTEM_STATS_2;
---truncate table XML_SYSTEM_STATS_3;
---truncate table XML_NTWQOS;
---truncate table XML_NTWQOS_1;
---truncate table XML_CARD_STATUS;
---
-----------------------------------------------------------------------------------
---truncate table ALC_STATS_CPUMEM_BH;                                             
---truncate table ALC_STATS_CPUMEM_DAY;                                            
---truncate table ALC_STATS_CPUMEM_IBHW;                                           
---truncate table ALC_STATS_IPRAN_BH;                                              
---truncate table ALC_STATS_IPRAN_DAY;                                             
---truncate table ALC_STATS_IPRAN_IBHW;                                            
---truncate table ALC_CARDSLOT_IPRAN_OBJ;                                          
---truncate table ALC_PHYSICALPORT_IPRAN_OBJ;
-----------------------------------------------------------------------------------
-truncate table ALC_LAGS_IPRAN_SCNEOLR_RAW;
-truncate table ALC_LAGS_IPRAN_SCNIOLR_RAW;
-truncate table ALC_MEDIA_INDP_STATS_IPRAN_RAW;
-truncate table ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                                  
-truncate table ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
-----------------------------------------------------------------------------------
---truncate table ALC_STATS_CPUMEM_HOUR;                                           
---truncate table ALC_STATS_IPRAN_HOUR; 
-----------------------------------------------------------------------------------
---truncate table files;
---------------------------------------------------------------------------------
-create public synonym ALC_LAGS_IPRAN_SCNEOLR_RAW for mcarrasco.ALC_LAGS_IPRAN_SCNEOLR_RAW;
-create public synonym ALC_LAGS_IPRAN_SCNIOLR_RAW for mcarrasco.ALC_LAGS_IPRAN_SCNIOLR_RAW;
-create public synonym ALC_MEDIA_INDP_STATS_IPRAN_RAW for mcarrasco.ALC_MEDIA_INDP_STATS_IPRAN_RAW;
-create public synonym ALC_SYSTEM_CPU_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_CPU_STATS_IPRAN_RAW;                             
-create public synonym ALC_SYSTEM_MEM_STATS_IPRAN_RAW for mcarrasco.ALC_SYSTEM_MEM_STATS_IPRAN_RAW;
-
-create public synonym ALC_STATS_CPUMEM_HOUR for SMART.ALC_STATS_CPUMEM_HOUR;
-create public synonym ALC_STATS_IPRAN_HOUR for SMART.ALC_STATS_IPRAN_HOUR;  
-
-create public synonym ALC_STATS_CPUMEM_DAY for SMART.ALC_STATS_CPUMEM_DAY;  
-create public synonym ALC_STATS_IPRAN_DAY for SMART.ALC_STATS_IPRAN_DAY; 
-
-create public synonym ALC_STATS_CPUMEM_BH for SMART.ALC_STATS_CPUMEM_BH;    
-create public synonym ALC_STATS_IPRAN_BH for SMART.ALC_STATS_IPRAN_BH; 
-
-create public synonym ALC_STATS_IPRAN_IBHW for SMART.ALC_STATS_IPRAN_IBHW;  
-create public synonym ALC_STATS_CPUMEM_IBHW for SMART.ALC_STATS_CPUMEM_IBHW;
-
-create public synonym ALC_CARDSLOT_IPRAN_OBJ for SMART.ALC_CARDSLOT_IPRAN_OBJ;
-create public synonym ALC_PHYSICALPORT_IPRAN_OBJ for SMART.ALC_PHYSICALPORT_IPRAN_OBJ;
---------------------------------------------------------------------------------
-grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to mstuyck;
-grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to mstuyck;
-grant select on ALC_MEDIA_INDP_STATS_IPRAN_RAW to mstuyck;
-grant select on ALC_SYSTEM_CPU_STATS_IPRAN_RAW to mstuyck;                       
-grant select on ALC_SYSTEM_MEM_STATS_IPRAN_RAW to mstuyck;
-
-grant select on ALC_STATS_IPRAN_IBHW to PRFC;                                
-grant select on ALC_STATS_CPUMEM_IBHW to PRFC; 
-grant select on ALC_STATS_CPUMEM_BH to PRFC;                                 
-grant select on ALC_STATS_IPRAN_BH to PRFC;                                  
-grant select on ALC_STATS_CPUMEM_DAY to PRFC;                                
-grant select on ALC_STATS_IPRAN_DAY to PRFC;
-grant select on ALC_STATS_CPUMEM_HOUR to PRFC;                               
-grant select on ALC_STATS_IPRAN_HOUR to PRFC;  
-grant select on ALC_CARDSLOT_IPRAN_OBJ to PRFC;                               
-grant select on ALC_PHYSICALPORT_IPRAN_OBJ to PRFC;
-
-grant select on ALC_LAGS_IPRAN_SCNEOLR_RAW to frinaldi;
-grant select on ALC_LAGS_IPRAN_SCNIOLR_RAW to frinaldi;
-grant select on ALC_MEDIA_INDP_STATS_IPRAN_RAW to frinaldi;
-grant select on ALC_SYSTEM_CPU_STATS_IPRAN_RAW to frinaldi;                       
-grant select on ALC_SYSTEM_MEM_STATS_IPRAN_RAW to frinaldi;
-grant select on ALC_STATS_IPRAN_IBHW to frinaldi;                                
-grant select on ALC_STATS_CPUMEM_IBHW to frinaldi; 
-grant select on ALC_STATS_CPUMEM_BH to frinaldi;                                 
-grant select on ALC_STATS_IPRAN_BH to frinaldi;                                  
-grant select on ALC_STATS_CPUMEM_DAY to frinaldi;                                
-grant select on ALC_STATS_IPRAN_DAY to frinaldi;
-grant select on ALC_STATS_CPUMEM_HOUR to frinaldi;                               
-grant select on ALC_STATS_IPRAN_HOUR to frinaldi;  
-grant select on ALC_CARDSLOT_IPRAN_OBJ to frinaldi;                               
-grant select on ALC_PHYSICALPORT_IPRAN_OBJ to frinaldi;
---------------------------------------------------------------------------------
 
 select 'truncate table '||table_name||';'
 from user_tables
@@ -482,88 +373,86 @@ END;
 
 SET SERVEROUTPUT ON
 
-EXEC DROP_INTERVAL_PARTITION_SP('ALC_STATS_IPRAN_HOUR','2017-01-20 00:00:00');
+DEFINE P_TABLA = 'ALC_MEDIA_INDP_STATS_IPRAN_RAW'
+DEFINE P_TIMESTAMP = '2017-02-19 00:00:00';
+
+DECLARE
+CURSOR V_CUR IS
+SELECT  PARTITION_NAME,
+        HIGH_VALUE
+FROM    USER_TAB_PARTITIONS
+WHERE   TABLE_NAME = 'ALC_MEDIA_INDP_STATS_IPRAN_RAW'
+AND INTERVAL = 'YES';
+--
+V_HIGH_VALUE TIMESTAMP;
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER SESSION SET NLS_DATE_FORMART= ''YYYY-MM-DD HH24:MI:SS''';
+   FOR V_REC IN V_CUR LOOP
+      EXECUTE IMMEDIATE 'BEGIN :1 := ' || V_REC.HIGH_VALUE || '; END;'
+        USING OUT V_HIGH_VALUE;
+      IF V_HIGH_VALUE = TO_CHAR(TO_DATE('&P_TIMESTAMP','YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') --TRUNC(SYSDATE,'MM')
+        THEN
+          DBMS_OUTPUT.PUT_LINE('ALTER TABLE '||'&P_TABLA'||' DROP PARTITION ' || V_REC.PARTITION_NAME || ';');
+          --EXECUTE IMMEDIATE 'ALTER TABLE INTERVAL_PART_TEST DROP PARTITION ' || V_REC.PARTITION_NAME;
+      END IF;
+    END LOOP;
+END;
 
 
 
---continuar con el dia 13
-
-insert into csco_interface_hour(
-FECHA,
-NODE,
-INTERFAZ,
-IFINDEX,
-IFTYPE,
-IFSPEED,
-SENDUTIL,
-SENDTOTALPKTS,
-SENDTOTALPKTRATE,
-SENDBYTES,
-SENDBYTERATE,
-SENDBITRATE,
-SENDUCASTPKTPERCENT,
-SENDMCASTPKTPERCENT,
-SENDBCASTPKTPERCENT,
-SENDERRORS,
-SENDERRORPERCENT,
-SENDDISCARDS,
-SENDDISCARDPERCENT,
-RECEIVEUTIL,
-RECEIVETOTALPKTS,
-RECEIVETOTALPKTRATE,
-RECEIVEBYTES,
-RECEIVEBYTERATE,
-RECEIVEBITRATE,
-RECEIVEUCASTPKTPERCENT,
-RECEIVEMCASTPKTPERCENT,
-RECEIVEBCASTPKTPERCENT,
-RECEIVEERRORS,
-RECEIVEERRORPERCENT,
-RECEIVEDISCARDS,
-RECEIVEDISCARDPERCENT,
-SENDBCASTPKTRATE,
-RECEIVEBCASTPKTRATE,
-IFTYPESTRING)
-select 
-FECHA,
-NODE,
-INTERFAZ,
-IFINDEX,
-IFTYPE,
-IFSPEED,
-SENDUTIL,
-SENDTOTALPKTS,
-SENDTOTALPKTRATE,
-SENDBYTES,
-SENDBYTERATE,
-SENDBITRATE,
-SENDUCASTPKTPERCENT,
-SENDMCASTPKTPERCENT,
-SENDBCASTPKTPERCENT,
-SENDERRORS,
-SENDERRORPERCENT,
-SENDDISCARDS,
-SENDDISCARDPERCENT,
-RECEIVEUTIL,
-RECEIVETOTALPKTS,
-RECEIVETOTALPKTRATE,
-RECEIVEBYTES,
-RECEIVEBYTERATE,
-RECEIVEBITRATE,
-RECEIVEUCASTPKTPERCENT,
-RECEIVEMCASTPKTPERCENT,
-RECEIVEBCASTPKTPERCENT,
-RECEIVEERRORS,
-RECEIVEERRORPERCENT,
-RECEIVEDISCARDS,
-RECEIVEDISCARDPERCENT,
-SENDBCASTPKTRATE,
-RECEIVEBCASTPKTRATE,
-IFTYPESTRING
-from csco_interface_hour_old
-where to_char(fecha,'DD.MM.YYYY') = '12.01.2017';
 
 
+EXEC DROP_INTERVAL_PARTITION_SP('ALC_MEDIA_INDP_STATS_IPRAN_RAW','2017-02-19 00:00:00');
 
-delete from csco_interface_hour_old
-where to_char(fecha,'DD.MM.YYYY') = '12.01.2017';
+--
+-- PARA GENERAR LOS DATOS PARA EL LOG
+SET HEAD OFF
+SET FEEDBACK OFF
+SET LINES 160
+SET PAGES 5000
+set feedback off
+SET VERIFY OFF
+
+DEFINE  TIPO = 'V_MMSC_SERVICE_ZTE_DAY(I).'
+DEFINE TABLA = 'MMSC_SERVICE_ZTE_DAY'
+SELECT  CHR(39)||' '||COLUMN_NAME||' => '||CHR(39)||CHR(124)||CHR(124)||
+        CASE 
+          WHEN DATA_TYPE = 'NUMBER' THEN 'TO_CHAR(&TIPO'||COLUMN_NAME||')||'
+          WHEN DATA_TYPE = 'VARCHAR2' THEN '&TIPO'||COLUMN_NAME||'||'
+          ELSE '&TIPO'||COLUMN_NAME||'||'
+        END
+FROM ALL_TAB_COLUMNS
+WHERE OWNER = 'MCARRASCO'
+AND TABLE_NAME = '&TABLA'
+ORDER BY Column_Id;
+
+--
+WITH INNER_ONE  AS (SELECT  /*+ INLINE */
+                            MAC_ADDRESS
+                            ,SITE_ID
+                            ,SITE_NAME
+                            ,OBJECT_FULL_NAME
+                            ,ROW_NUMBER() OVER (PARTITION BY SITE_NAME,SITE_ID,MAC_ADDRESS,OBJECT_FULL_NAME 
+                                                ORDER BY SITE_NAME,SITE_ID,MAC_ADDRESS,OBJECT_FULL_NAME) RN
+                    FROM ALC_PHYSICALPORT_IPRAN_RAW
+                    WHERE TO_CHAR(FECHA,'YYYYMMDDHH24') = '20170223'||12
+                    ),
+     INNER_TWO AS (SELECT  SITE_ID
+                          ,SITE_NAME
+                          ,MAC_ADDRESS
+                          ,OBJECT_FULL_NAME
+                    FROM  INNER_ONE
+                    WHERE RN = 1)
+SELECT  SITE_ID
+        ,SITE_NAME
+        ,MAC_ADDRESS
+        ,OBJECT_FULL_NAME
+FROM  ALC_PHYSICALPORT_IPRAN_OBJ
+WHERE VALID_FINISH_DATE > SYSDATE
+MINUS
+SELECT  SITE_ID
+      ,SITE_NAME
+      ,MAC_ADDRESS
+      ,OBJECT_FULL_NAME
+FROM  INNER_TWO;
+

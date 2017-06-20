@@ -122,7 +122,7 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>592</xloc>
+      <xloc>400</xloc>
       <yloc>128</yloc>
       </entry>
     <entry>
@@ -133,7 +133,7 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>768</xloc>
-      <yloc>336</yloc>
+      <yloc>368</yloc>
       </entry>
     <entry>
       <name>Set REGEXP variables</name>
@@ -167,7 +167,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
+      <xloc>576</xloc>
       <yloc>128</yloc>
       </entry>
     <entry>
@@ -200,7 +200,7 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
+      <xloc>576</xloc>
       <yloc>240</yloc>
       </entry>
     <entry>
@@ -231,8 +231,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>400</xloc>
-      <yloc>128</yloc>
+      <xloc>576</xloc>
+      <yloc>368</yloc>
       </entry>
   </entries>
   <hops>
@@ -255,8 +255,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>UpProcessToRunStatus</from>
-      <to>Success</to>
+      <from>Calcular Sum. BH DAY IBHW</from>
+      <to>Set REGEXP variables</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -265,6 +265,15 @@
     </hop>
     <hop>
       <from>SetEnvironment</from>
+      <to>Calcular Sum. BH DAY IBHW</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>UpProcessToRunStatus</from>
       <to>Tablas Objetos</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -274,16 +283,7 @@
     </hop>
     <hop>
       <from>Tablas Objetos</from>
-      <to>Calcular Sum. BH DAY IBHW</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Calcular Sum. BH DAY IBHW</from>
-      <to>Set REGEXP variables</to>
+      <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

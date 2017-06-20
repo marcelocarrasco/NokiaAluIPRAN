@@ -125,53 +125,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>976</xloc>
+      <xloc>784</xloc>
       <yloc>64</yloc>
-      </entry>
-    <entry>
-      <name>Set FILE-NAME variable</name>
-      <description/>
-      <type>SET_VARIABLES</type>
-      <replacevars>N</replacevars>
-      <filename>&#x24;&#x7b;NOKIAALUIPRAN-HOME&#x7d;&#x2f;ipran_config.properties</filename>
-      <file_variable_type>CURRENT_JOB</file_variable_type>
-      <fields>
-        <field>
-          <variable_name>FILE-NAME</variable_name>
-          <variable_value>&#x24;&#x7b;CARDSTATUS-XML&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>FILES-LOCATION</variable_name>
-          <variable_value>&#x24;&#x7b;FILES&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>FILE-NAME-EXCLUDE</variable_name>
-          <variable_value>&#x24;&#x7b;CARDSTATUS-XML-EXCLUDE&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>ORACLE-REGEXP</variable_name>
-          <variable_value>&#x24;&#x7b;CARDSTATUS_XML_REGEXP_ORA&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>TABLA</variable_name>
-          <variable_value>XML_CARD_STATUS</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>FECHA_PROC</variable_name>
-          <variable_value>&#x24;&#x7b;FECHA-PROC&#x7d;</variable_value>
-          <variable_type>CURRENT_JOB</variable_type>
-        </field>
-      </fields>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>800</xloc>
-      <yloc>224</yloc>
       </entry>
   </entries>
   <hops>
@@ -190,24 +145,6 @@
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CardStatusXmlEndToEnd</from>
-      <to>Set FILE-NAME variable</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Set FILE-NAME variable</from>
-      <to>Success</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>

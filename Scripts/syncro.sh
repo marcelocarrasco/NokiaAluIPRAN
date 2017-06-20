@@ -53,6 +53,10 @@ if [[ -s $LISTA_OUTPUT ]] ; then
   for file in $(ls $1/xml_output/*SystemStats_xml_2.csv) ; do mv $file ${file//_xml_2/_2_xml} ; done
   for file in $(ls $1/xml_output/*SystemStats_xml_3.csv) ; do mv $file ${file//_xml_3/_3_xml} ; done
   for file in $(ls $1/xml_output/*NtwQos_xml_1.csv) ; do mv $file ${file//_xml_1/_1_xml} ; done
+  #
+  # Antes de popular las tablas XML_*, depuro los archivos
+  sh $1/Scripts/CardStatus_xml_filter.sh
+  sh $1/Scripts/mediaIndependStats_xml_filter.sh
   # Popular tablas XML_* y RAW Tables
   sh $1/Scripts/ipranSyncroXML.sh $FECHA_PROC
 else

@@ -2,7 +2,7 @@
 <job>
   <name>TablasObjetosEndToEnd</name>
     <description>Popula las tablas Object</description>
-    <extended_description>Ambas transformaciones se ejecutan en forma diara buscando datos del dia anterior, es decir, que se&#xa;necesita tener los el dia completo de datos en las tablas XML_CARD_STATUS Y XML_MEDIA_INDEPEND_STATS&#xa;previo a la ejecucion del Job.&#xa;El parametro FECHA_PROC identifica la fecha &#x28;YYYYMMDD&#x29; de dia anterior, ej. si el dia que se ejecuta&#xa;el Job es 05.12.2016, el valor de FECHA_PROC sera 20161204.</extended_description>
+    <extended_description>Ambas transformaciones se ejecutan en forma diara buscando datos del dia anterior, es decir, que se&#xa;necesita tener los el dia completo de datos en las tablas ALC_CARDSLOT_IPRAN_RAW Y ALC_PHYSICALPORT_IPRAN_RAW&#xa;previo a la ejecucion del Job.&#xa;El parametro FECHA_PROC identifica la fecha &#x28;YYYYMMDD&#x29; de dia anterior, ej. si el dia que se ejecuta&#xa;el Job es 05.12.2016, el valor de FECHA_PROC sera 20161204.</extended_description>
     <job_version/>
     <job_status>0</job_status>
   <directory>&#x2f;</directory>
